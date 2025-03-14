@@ -1,3 +1,52 @@
+export interface OldBail {
+  reference: string
+  locataire: string
+  surface: number
+  loyer: number
+  dateDebut: string
+  dateFin: string
+  actif: boolean
+}
+
+export interface NewBail {
+  leaseId: string
+  title: string
+  status: "actif" | "inactif" | "Propriété Gouvernementale"
+  general: {
+    leaseDetails: {
+      type: string
+      primaryUse: string
+      baseYear: string
+    }
+    financialDetails: {
+      rent: string
+      accountingType: string
+      paymentTerms: string
+    }
+  }
+  dates: {
+    start: string
+    duration: string
+    end: string
+  }
+  parties: {
+    tenant: {
+      organization: string
+      legalName: string
+      id: string
+      location: string
+    }
+  }
+  terms: {
+    securityRequirements: string[]
+  }
+  metadata: {
+    lastUpdated: string
+  }
+}
+
+export type Bail = OldBail | NewBail
+
 export interface Property {
   id: number
   nom: string
@@ -20,7 +69,7 @@ export interface Property {
   image?: string
   description: string
   installations: string[]
-  bails: Lease[]
+  bails: Bail[]
   projets: Project[]
   taches: Task[]
 }

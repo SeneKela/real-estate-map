@@ -1,15 +1,12 @@
 {
-  "name": "real-estate-map",
+  "name": "my-v0-project",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://burkel.github.io/real-estate-map",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d out"
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
@@ -73,7 +70,6 @@
     "@types/node": "^20.11.16",
     "@types/react": "^18.2.52",
     "@types/react-dom": "^18.2.18",
-    "gh-pages": "^6.3.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"

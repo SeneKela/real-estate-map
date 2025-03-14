@@ -50,6 +50,8 @@ import {
   SquareUser,
   Pencil,
   Printer,
+  School,
+  Droplet,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -291,9 +293,9 @@ const getInstallationIcon = (installation: string): LucideIcon => {
     "Parking souterrain": Parking,
     Amphithéâtres: Landmark,
     Cafétéria: Coffee,
-    "Espaces étudiants": Users,
+    "Espaces étudiants": School,
     "Galeries d'exposition": Landmark,
-    Fontaines: Landmark,
+    Fontaines: Droplet,
     Boutiques: Building,
     Restaurants: Utensils,
     "WiFi haute performance": Wifi,
@@ -515,7 +517,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                     <Badge className={cn("px-2.5 py-1 text-xs font-medium", statusBadgeConfig.className)}>
                       {statusBadgeConfig.icon && <statusBadgeConfig.icon className="h-3.5 w-3.5 mr-1.5" />}
                       {statusBadgeConfig.text}
-                    </Badge>
+        </Badge>
 
                     <div className="flex items-center gap-2">
                       <Button
@@ -528,7 +530,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                         <span className="sr-only">Fermer</span>
                       </Button>
                     </div>
-                  </div>
+      </div>
 
                   <div>
                     <div className="flex items-center gap-4">
@@ -569,7 +571,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                     <Briefcase className="h-5 w-5" />
                   </div>
                   <div className="text-center">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Bails actifs</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Baux actifs</p>
                     <p className="text-lg font-semibold">{activeLeases}</p>
                   </div>
                 </div>
@@ -601,11 +603,11 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                         Détails
                       </TabsTrigger>
                       <TabsTrigger
-                        value="bails"
+                        value="baux"
                         className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:text-gray-950 data-[state=active]:shadow-sm dark:ring-offset-gray-950 dark:focus-visible:ring-gray-300 dark:data-[state=active]:bg-gray-950 dark:data-[state=active]:text-gray-50"
                       >
                         <Briefcase className="h-4 w-4 mr-2" />
-                        Bails
+                        Baux
                       </TabsTrigger>
                       <TabsTrigger
                         value="projets"
@@ -850,11 +852,11 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                       </div>
                     </TabsContent>
 
-                    <TabsContent value="bails" className="mt-0 space-y-6">
+                    <TabsContent value="baux" className="mt-0 space-y-6">
                       <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 flex items-center gap-2">
                           <Briefcase className="h-5 w-5 text-gray-500" />
-                          Bails en cours
+                          Baux en cours
                         </h3>
                         <Badge className="rounded-full bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
                           {property.bails?.length || 0}
@@ -1181,14 +1183,15 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                               </div>
                             </CardHeader>
                             <CardContent className="p-0">
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-y md:divide-y-0 md:divide-x divide-gray-100 dark:divide-gray-800">
-                                <div className="p-4">
-                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-                                    <Info className="h-4 w-4 mr-2 text-gray-500" />
-                                    Informations générales
-                                  </h4>
-                                  <div className="space-y-4">
-                                    <div className="grid grid-cols-2 gap-3 text-sm">
+                              <div className="p-6 space-y-6">
+                                {/* General Information Row */}
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                                      <Info className="h-4 w-4 mr-2 text-gray-500" />
+                                      Informations générales
+                                    </h4>
+                                    <div className="space-y-3">
                                       <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
                                         <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Type de projet</p>
                                         <p className="font-medium">
@@ -1202,232 +1205,145 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                         </p>
                                       </div>
                                     </div>
-                                    <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
-                                      <h5 className="text-xs font-medium mb-2 text-blue-700 dark:text-blue-400">
-                                        Période du projet
-                                      </h5>
-                                      <div className="flex justify-between text-sm">
-                                        <div>
-                                          <p className="text-xs text-gray-500 dark:text-gray-400">Début</p>
-                                          <p className="font-medium">
-                                            {detailedProject.general_information.planned_start_date}
-                                          </p>
-                                        </div>
-                                        <div>
-                                          <p className="text-xs text-gray-500 dark:text-gray-400">Fin</p>
-                                          <p className="font-medium">
-                                            {detailedProject.general_information.planned_end_date}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </div>
+                                  </div>
 
-                                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-5 mb-3 flex items-center">
-                                      <Users className="h-4 w-4 mr-2 text-gray-500" />
-                                      Contacts clés
+                                  <div className="md:col-span-2">
+                                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                                      <CalendarDays className="h-4 w-4 mr-2 text-gray-500" />
+                                      Période du projet
                                     </h4>
-                                    <div className="space-y-2">
-                                      {detailedProject.key_contacts.map((contact, idx) => (
-                                        <div
-                                          key={idx}
-                                          className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-800 last:border-0"
-                                        >
-                                          <div className="flex items-center gap-2">
-                                            <div className="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                                              <User className="h-4 w-4 text-gray-600 dark:text-gray-400" />
-                                            </div>
-                                            <div>
-                                              <p className="text-sm font-medium">{contact.name}</p>
-                                              <p className="text-xs text-gray-500">{contact.role}</p>
-                                            </div>
-                                          </div>
-                                          <button className="text-xs text-blue-600 hover:text-blue-800 flex items-center">
-                                            <Phone className="h-3 w-3 mr-1" />
-                                            {contact.phone}
-                                          </button>
+                                    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                                      <div className="grid grid-cols-3 divide-x divide-blue-200 dark:divide-blue-800">
+                                        <div className="px-4 text-center">
+                                          <span className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Date</span>
+                                          <span className="block text-sm font-medium">
+                                            {detailedProject.general_information.date}
+                                          </span>
                                         </div>
-                                      ))}
-                                    </div>
-                                  </div>
-
-                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-5 mb-3 flex items-center">
-                                    <Banknote className="h-4 w-4 mr-2 text-gray-500" />
-                                    Budget & Financement
-                                  </h4>
-                                  <div className="space-y-4">
-                                    <div className="grid grid-cols-1 gap-3 text-sm">
-                                      <div className="grid grid-cols-2 gap-3">
-                                        <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                            Budget initial
-                                          </p>
-                                          <p className="font-medium">
-                                            {detailedProject.budget_information.original_budget}
-                                          </p>
+                                        <div className="px-4 text-center">
+                                          <span className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Début</span>
+                                          <span className="block text-sm font-medium">
+                                            {detailedProject.general_information.planned_start_date}
+                                          </span>
                                         </div>
-                                        <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Budget actuel</p>
-                                          <p className="font-medium">
-                                            {detailedProject.budget_information.budget_current}
-                                          </p>
+                                        <div className="px-4 text-center">
+                                          <span className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Fin</span>
+                                          <span className="block text-sm font-medium">
+                                            {detailedProject.general_information.planned_end_date}
+                                          </span>
                                         </div>
-                                      </div>
-                                      <div className="grid grid-cols-2 gap-3">
-                                        <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Payé</p>
-                                          <p className="font-medium">{detailedProject.budget_information.paid}</p>
-                                        </div>
-                                        <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                            Prévision finale
-                                          </p>
-                                          <p className="font-medium">
-                                            {detailedProject.budget_information.forecast_final}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <div className="border border-gray-100 dark:border-gray-800 rounded-lg p-3">
-                                      <h5 className="text-xs font-medium mb-2">Source de financement</h5>
-                                      <div className="space-y-2 text-sm">
-                                        <div className="flex justify-between">
-                                          <span className="text-gray-500 dark:text-gray-400">Nom</span>
-                                          <span>{detailedProject.funding_source.name}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                          <span className="text-gray-500 dark:text-gray-400">Année fiscale</span>
-                                          <span>{detailedProject.funding_source.fiscal_year}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                          <span className="text-gray-500 dark:text-gray-400">Engagement</span>
-                                          <span>{detailedProject.funding_source.committed_to_project}</span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-5 mb-3 flex items-center">
-                                    <Clock8 className="h-4 w-4 mr-2 text-gray-500" />
-                                    Tâches ({detailedProject.tasks.total_count})
-                                  </h4>
-                                  <div className="space-y-3">
-                                    <div className="space-y-2">
-                                      <div className="flex justify-between text-sm">
-                                        <span className="text-gray-500 dark:text-gray-400">Avancement:</span>
-                                        <span className="font-medium">
-                                          {detailedProject.tasks.completion_percentage}%
-                                        </span>
-                                      </div>
-                                      <Progress
-                                        value={detailedProject.tasks.completion_percentage}
-                                        className={cn("h-2 bg-gray-100 dark:bg-gray-800", getProgressColor(detailedProject.tasks.completion_percentage))}
-                                      />
-                                    </div>
-                                    <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                                        Tâches principales
-                                      </p>
-                                      <div className="space-y-1">
-                                        {detailedProject.tasks.key_tasks.map((task, idx) => (
-                                          <div key={idx} className="flex items-center text-sm">
-                                            <CheckCircle2 className="h-3.5 w-3.5 mr-2 text-emerald-500" />
-                                            <span>{task}</span>
-                                          </div>
-                                        ))}
                                       </div>
                                     </div>
                                   </div>
                                 </div>
 
-                                <div className="p-4">
-                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-                                    <Banknote className="h-4 w-4 mr-2 text-gray-500" />
-                                    Budget & Financement
-                                  </h4>
-                                  <div className="space-y-4">
-                                    <div className="grid grid-cols-1 gap-3 text-sm">
+                                {/* Budget and Tasks Row */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                  {/* Budget Section */}
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                                      <Banknote className="h-4 w-4 mr-2 text-gray-500" />
+                                      Budget & Financement
+                                    </h4>
+                                    <div className="space-y-4">
                                       <div className="grid grid-cols-2 gap-3">
                                         <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                            Budget initial
-                                          </p>
-                                          <p className="font-medium">
-                                            {detailedProject.budget_information.original_budget}
-                                          </p>
+                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Budget initial</p>
+                                          <p className="font-medium">{detailedProject.budget_information.original_budget}</p>
                                         </div>
                                         <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
                                           <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Budget actuel</p>
-                                          <p className="font-medium">
-                                            {detailedProject.budget_information.budget_current}
-                                          </p>
+                                          <p className="font-medium">{detailedProject.budget_information.budget_current}</p>
                                         </div>
-                                      </div>
-                                      <div className="grid grid-cols-2 gap-3">
                                         <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
                                           <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Payé</p>
                                           <p className="font-medium">{detailedProject.budget_information.paid}</p>
                                         </div>
                                         <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                            Prévision finale
-                                          </p>
-                                          <p className="font-medium">
-                                            {detailedProject.budget_information.forecast_final}
-                                          </p>
+                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Prévision finale</p>
+                                          <p className="font-medium">{detailedProject.budget_information.forecast_final}</p>
                                         </div>
                                       </div>
-                                    </div>
 
-                                    <div className="border border-gray-100 dark:border-gray-800 rounded-lg p-3">
-                                      <h5 className="text-xs font-medium mb-2">Source de financement</h5>
-                                      <div className="space-y-2 text-sm">
-                                        <div className="flex justify-between">
-                                          <span className="text-gray-500 dark:text-gray-400">Nom</span>
-                                          <span>{detailedProject.funding_source.name}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                          <span className="text-gray-500 dark:text-gray-400">Année fiscale</span>
-                                          <span>{detailedProject.funding_source.fiscal_year}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                          <span className="text-gray-500 dark:text-gray-400">Engagement</span>
-                                          <span>{detailedProject.funding_source.committed_to_project}</span>
+                                      <div className="border border-gray-100 dark:border-gray-800 rounded-lg p-3">
+                                        <h5 className="text-xs font-medium mb-2">Source de financement</h5>
+                                        <div className="grid grid-cols-2 gap-4 text-sm">
+                                          <div>
+                                            <span className="block text-gray-500 dark:text-gray-400 mb-1">Nom</span>
+                                            <span className="font-medium">{detailedProject.funding_source.name}</span>
+                                          </div>
+                                          <div>
+                                            <span className="block text-gray-500 dark:text-gray-400 mb-1">Année fiscale</span>
+                                            <span className="font-medium">{detailedProject.funding_source.fiscal_year}</span>
+                                          </div>
+                                          <div className="col-span-2">
+                                            <span className="block text-gray-500 dark:text-gray-400 mb-1">Engagement</span>
+                                            <span className="font-medium">{detailedProject.funding_source.committed_to_project}</span>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
 
-                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-5 mb-3 flex items-center">
-                                    <Clock8 className="h-4 w-4 mr-2 text-gray-500" />
-                                    Tâches ({detailedProject.tasks.total_count})
+                                  {/* Tasks Section */}
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                                      <Clock8 className="h-4 w-4 mr-2 text-gray-500" />
+                                      Tâches ({detailedProject.tasks.total_count})
+                                    </h4>
+                                    <div className="space-y-4">
+                                      <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
+                                        <div className="flex justify-between items-center mb-3">
+                                          <span className="text-sm text-gray-500 dark:text-gray-400">Avancement:</span>
+                                          <span className="text-sm font-medium">{detailedProject.tasks.completion_percentage}%</span>
+                                        </div>
+                                        <Progress
+                                          value={detailedProject.tasks.completion_percentage}
+                                          className={cn("h-2 bg-gray-200 dark:bg-gray-700", getProgressColor(detailedProject.tasks.completion_percentage))}
+                                        />
+                                      </div>
+                                      <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
+                                        <h5 className="text-xs font-medium mb-3">Tâches principales</h5>
+                                        <div className="grid grid-cols-1 gap-2">
+                                          {detailedProject.tasks.key_tasks.map((task, idx) => (
+                                            <div key={idx} className="flex items-center text-sm bg-white dark:bg-gray-800 p-2 rounded">
+                                              <CheckCircle2 className="h-4 w-4 mr-2 text-emerald-500" />
+                                              <span>{task}</span>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Contacts Row */}
+                                <div>
+                                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                                    <Users className="h-4 w-4 mr-2 text-gray-500" />
+                                    Contacts clés
                                   </h4>
-                                  <div className="space-y-3">
-                                    <div className="space-y-2">
-                                      <div className="flex justify-between text-sm">
-                                        <span className="text-gray-500 dark:text-gray-400">Avancement:</span>
-                                        <span className="font-medium">
-                                          {detailedProject.tasks.completion_percentage}%
-                                        </span>
-                                      </div>
-                                      <Progress
-                                        value={detailedProject.tasks.completion_percentage}
-                                        className={cn("h-2 bg-gray-100 dark:bg-gray-800", getProgressColor(detailedProject.tasks.completion_percentage))}
-                                      />
-                                    </div>
-                                    <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                                        Tâches principales
-                                      </p>
-                                      <div className="space-y-1">
-                                        {detailedProject.tasks.key_tasks.map((task, idx) => (
-                                          <div key={idx} className="flex items-center text-sm">
-                                            <CheckCircle2 className="h-3.5 w-3.5 mr-2 text-emerald-500" />
-                                            <span>{task}</span>
+                                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {detailedProject.key_contacts.map((contact, idx) => (
+                                      <div
+                                        key={idx}
+                                        className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg flex items-center justify-between"
+                                      >
+                                        <div className="flex items-center gap-3">
+                                          <div className="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                                            <User className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                                           </div>
-                                        ))}
+                                          <div>
+                                            <p className="text-sm font-medium">{contact.name}</p>
+                                            <p className="text-xs text-gray-500">{contact.role}</p>
+                                          </div>
+                                        </div>
+                                        <button className="text-xs text-blue-600 hover:text-blue-800 flex items-center">
+                                          <Phone className="h-3 w-3 mr-1" />
+                                          {contact.phone}
+                                        </button>
                                       </div>
-                                    </div>
+                                    ))}
                                   </div>
                                 </div>
                               </div>
@@ -1480,7 +1396,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                   <div className="grid grid-cols-2 gap-3 text-sm">
                                     <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
                                       <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Budget</p>
-                                      <p className="font-medium">{formatPrice(projet.budget)}</p>
+                                      <p className="text-sm font-medium">{formatPrice(projet.budget)}</p>
                                     </div>
                                     <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
                                       <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Période</p>

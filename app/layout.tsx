@@ -1,10 +1,12 @@
-import type React from "react"
 import type { Metadata } from "next"
+import { Inter } from "next/font/google"
 import "./globals.css"
 
+const inter = Inter({ subsets: ["latin"] })
+
 export const metadata: Metadata = {
-  title: "IBM -Tririga Redesign pour DIE",
-  description: "Created by Martin Burkel",
+  title: "Carte des propriétés",
+  description: "Application de gestion des propriétés gouvernementales",
 }
 
 // Ajouter le style global pour les marqueurs de carte
@@ -26,11 +28,11 @@ export default function RootLayout({
           `}
         </style>
       </head>
-      <body>{children}</body>
+      <body className={inter.className} suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   )
 }
-
-
 
 import './globals.css'

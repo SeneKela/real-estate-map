@@ -15,6 +15,10 @@ import {
   Clock,
   ChevronUp,
   ListFilter,
+  ChevronDown,
+  Building2,
+  Clock8,
+  Tag,
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -27,99 +31,7 @@ import { properties } from "@/lib/data"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { motion, AnimatePresence } from "framer-motion"
-
-interface OldBail {
-  actif: boolean
-  reference: string
-  locataire: string
-  surface: number
-  loyer: number
-  dateDebut: string
-  dateFin: string
-}
-
-interface NewBail {
-  leaseId: string
-  title: string
-  status: "actif" | "inactif" | "Propriété Gouvernementale"
-  general: {
-    leaseDetails: {
-      type: string
-      primaryUse: string
-      baseYear: string
-    }
-    financialDetails: {
-      rent: string
-      accountingType: string
-      paymentTerms: string
-    }
-  }
-  dates: {
-    start: string
-    duration: string
-    end: string
-  }
-  parties: {
-    tenant: {
-      organization: string
-      legalName: string
-      id: string
-      location: string
-    }
-  }
-  terms: {
-    securityRequirements: string[]
-  }
-  metadata: {
-    lastUpdated: string
-  }
-}
-
-type Bail = OldBail | NewBail
-
-interface Property {
-  id: number
-  nom: string
-  adresse: string
-  ville: string
-  departement: string
-  region: string
-  valeur: number
-  superficie: number
-  type: string
-  status: "actif" | "renovation" | "historique"
-  ministere: string
-  niveauSecurite: "faible" | "moyen" | "élevé"
-  telephone?: string
-  tauxOccupation: number
-  occupationActuelle: number
-  capaciteMax: number
-  latitude: number
-  longitude: number
-  image?: string
-  description: string
-  installations: string[]
-  bails: Bail[]
-  projets: Array<{
-    actif: boolean
-    nom: string
-    responsable: string
-    budget: number
-    dateDebut: string
-    dateFin: string
-    avancement: number
-    description: string
-  }>
-  taches: Array<{
-    titre: string
-    description: string
-    priorite: "haute" | "moyenne" | "basse"
-    assigneA: string
-    echeance: string
-    statut: string
-    categorie: string
-  }>
-}
+import type { Property } from "@/types/property"
 
 interface Filters {
   administratif: boolean
@@ -155,6 +67,13 @@ export function PropertySearch() {
     hasActiveProjects: false,
     hasOpenTasks: false,
   })
+
+  // Add new type to track matches
+  type MatchType = {
+    type: 'property' | 'bail' | 'project' | 'task'
+    text: string
+    subtext?: string
+  }
 
   // Function to normalize text for search
   const normalizeText = (text: string): string => {
@@ -210,18 +129,54 @@ export function PropertySearch() {
   }
 
   const filteredProperties = useMemo(() => {
-    return properties.filter((property) => {
+    return (properties as Property[]).filter((property) => {
       const normalizedSearchTerm = normalizeText(searchTerm)
       const normalizedPropertyName = normalizeText(property.nom)
       const normalizedPropertyAddress = normalizeText(property.adresse)
       const normalizedPropertyCity = normalizeText(property.ville)
       const normalizedPropertyMinistere = normalizeText(property.ministere)
 
+      // Search in bails
+      const matchesInBails = property.bails?.some(bail => {
+        if ('leaseId' in bail) {
+          // For new bail format
+          return (
+            normalizeText(bail.title || '').includes(normalizedSearchTerm) ||
+            normalizeText(bail.leaseId || '').includes(normalizedSearchTerm) ||
+            normalizeText(bail.parties?.tenant?.organization || '').includes(normalizedSearchTerm) ||
+            normalizeText(bail.parties?.tenant?.legalName || '').includes(normalizedSearchTerm)
+          )
+        } else {
+          // For old bail format
+          return (
+            normalizeText(bail.reference || '').includes(normalizedSearchTerm) ||
+            normalizeText(bail.locataire || '').includes(normalizedSearchTerm)
+          )
+        }
+      }) || false
+
+      // Search in projects
+      const matchesInProjects = property.projets?.some(projet => 
+        normalizeText(projet.nom).includes(normalizedSearchTerm) ||
+        normalizeText(projet.description).includes(normalizedSearchTerm) ||
+        normalizeText(projet.responsable).includes(normalizedSearchTerm)
+      ) || false
+
+      // Search in tasks
+      const matchesInTasks = property.taches?.some(tache =>
+        normalizeText(tache.titre).includes(normalizedSearchTerm) ||
+        normalizeText(tache.description).includes(normalizedSearchTerm) ||
+        normalizeText(tache.assigneA).includes(normalizedSearchTerm)
+      ) || false
+
       const matchesSearch =
         normalizedPropertyName.includes(normalizedSearchTerm) ||
         normalizedPropertyAddress.includes(normalizedSearchTerm) ||
         normalizedPropertyCity.includes(normalizedSearchTerm) ||
-        normalizedPropertyMinistere.includes(normalizedSearchTerm)
+        normalizedPropertyMinistere.includes(normalizedSearchTerm) ||
+        matchesInBails ||
+        matchesInProjects ||
+        matchesInTasks
 
       // Check if any type filter is active
       const anyTypeFilterActive = Object.keys(filters)
@@ -307,6 +262,64 @@ export function PropertySearch() {
     inputRef.current?.focus()
   }
 
+  // Function to get matches for a property
+  const getMatches = (property: Property): MatchType[] => {
+    const matches: MatchType[] = []
+    const normalizedSearchTerm = normalizeText(searchTerm)
+
+    // Only calculate matches if there's a search term
+    if (!searchTerm) return []
+
+    // Property matches
+    if (normalizeText(property.nom).includes(normalizedSearchTerm)) {
+      matches.push({ type: 'property', text: 'Propriété', subtext: property.nom })
+    }
+    if (normalizeText(property.adresse).includes(normalizedSearchTerm)) {
+      matches.push({ type: 'property', text: 'Adresse', subtext: property.adresse })
+    }
+    if (normalizeText(property.ministere).includes(normalizedSearchTerm)) {
+      matches.push({ type: 'property', text: 'Ministère', subtext: property.ministere })
+    }
+
+    // Bail matches
+    property.bails?.forEach(bail => {
+      if ('leaseId' in bail) {
+        if (normalizeText(bail.title || '').includes(normalizedSearchTerm)) {
+          matches.push({ type: 'bail', text: 'Bail', subtext: bail.title })
+        }
+        if (normalizeText(bail.parties?.tenant?.organization || '').includes(normalizedSearchTerm)) {
+          matches.push({ type: 'bail', text: 'Locataire', subtext: bail.parties.tenant.organization })
+        }
+      } else {
+        if (normalizeText(bail.locataire || '').includes(normalizedSearchTerm)) {
+          matches.push({ type: 'bail', text: 'Locataire', subtext: bail.locataire })
+        }
+      }
+    })
+
+    // Project matches
+    property.projets?.forEach(projet => {
+      if (normalizeText(projet.nom).includes(normalizedSearchTerm)) {
+        matches.push({ type: 'project', text: 'Projet', subtext: projet.nom })
+      }
+      if (normalizeText(projet.responsable).includes(normalizedSearchTerm)) {
+        matches.push({ type: 'project', text: 'Responsable', subtext: projet.responsable })
+      }
+    })
+
+    // Task matches
+    property.taches?.forEach(tache => {
+      if (normalizeText(tache.titre).includes(normalizedSearchTerm)) {
+        matches.push({ type: 'task', text: 'Tâche', subtext: tache.titre })
+      }
+      if (normalizeText(tache.assigneA).includes(normalizedSearchTerm)) {
+        matches.push({ type: 'task', text: 'Assigné à', subtext: tache.assigneA })
+      }
+    })
+
+    return matches
+  }
+
   if (!mounted) {
     return <div className="h-12 w-full max-w-md bg-muted animate-pulse rounded-full" />
   }
@@ -332,7 +345,6 @@ export function PropertySearch() {
           </div>
           <Input
             ref={inputRef}
-            type="search"
             placeholder="Rechercher une propriété..."
             className={cn(
               "pl-12 pr-12 py-6 h-14 bg-white/95 backdrop-blur-sm shadow-lg border-gray-200/70",
@@ -356,152 +368,60 @@ export function PropertySearch() {
                 <span className="sr-only">Effacer</span>
               </Button>
             )}
-            <Button
-              variant="ghost"
-              size="sm"
-              className={cn(
-                "h-8 w-8 p-0 hover:bg-gray-100/50 rounded-full transition-colors duration-150",
-                showFilters && "bg-gray-100/80",
-              )}
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              <ListFilter className="h-4 w-4 text-gray-500" />
-              <span className="sr-only">Filtres</span>
-            </Button>
           </div>
         </div>
       </div>
 
-      {/* Filtres avancés */}
-      <AnimatePresence>
-        {isExpanded && showFilters && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden bg-white/95 backdrop-blur-sm border-x border-gray-200/70"
-          >
-            <div className="p-4 space-y-6 bg-gray-50/80">
-              {/* Type de propriété */}
-              <div>
-                <h4 className="font-medium text-sm mb-3 flex items-center">
-                  <Building className="h-4 w-4 mr-2 text-gray-500" />
-                  Type de propriété
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {Object.keys(filters)
-                    .slice(0, 5)
-                    .map((key) => (
+      {/* Search match tags */}
+      {isExpanded && searchTerm && (
+        <div className="px-4 py-2 bg-white/95 backdrop-blur-sm border-x border-gray-200/70">
+          <div className="flex flex-wrap gap-2">
+            {(() => {
+              const allMatches = Array.from(new Set(filteredProperties.flatMap(property => 
+                getMatches(property).map(match => JSON.stringify(match))
+              )))
+              const displayedMatches = allMatches.slice(0, 3)
+              const remainingCount = allMatches.length - 3
+
+              return (
+                <>
+                  {displayedMatches.map((matchString) => {
+                    const match = JSON.parse(matchString) as MatchType
+                    return (
                       <Badge
-                        key={key}
-                        variant={filters[key as keyof Filters] ? "default" : "outline"}
-                        className={cn(
-                          "cursor-pointer rounded-full py-1.5 px-3 text-xs font-medium transition-all",
-                          filters[key as keyof Filters]
-                            ? "bg-primary/90 text-white hover:bg-primary/80"
-                            : "hover:bg-gray-100",
-                        )}
-                        onClick={() => setFilters({ ...filters, [key]: !filters[key as keyof Filters] })}
+                        key={`${match.type}-${match.text}-${match.subtext}`}
+                        variant="secondary"
+                        className="flex items-center gap-1.5 py-1 px-2 bg-gray-100/80 cursor-pointer hover:bg-gray-200/80 transition-colors"
+                        onClick={() => {
+                          setSearchTerm(match.subtext || "")
+                          setIsExpanded(true)
+                          inputRef.current?.focus()
+                        }}
                       >
-                        {key.charAt(0).toUpperCase() + key.slice(1)}
+                        {match.type === 'property' && <Building2 className="h-3 w-3" />}
+                        {match.type === 'bail' && <Briefcase className="h-3 w-3" />}
+                        {match.type === 'project' && <Wrench className="h-3 w-3" />}
+                        {match.type === 'task' && <Clock8 className="h-3 w-3" />}
+                        <span className="font-medium">{match.text}:</span>
+                        <span className="text-gray-600">{match.subtext}</span>
                       </Badge>
-                    ))}
-                </div>
-              </div>
-
-              {/* Statut */}
-              <div>
-                <h4 className="font-medium text-sm mb-3 flex items-center">
-                  <FileText className="h-4 w-4 mr-2 text-gray-500" />
-                  Statut
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {["tous", "actif", "renovation", "historique"].map((status) => (
+                    )
+                  })}
+                  {remainingCount > 0 && (
                     <Badge
-                      key={status}
-                      variant={filters.status === status ? "default" : "outline"}
-                      className={cn(
-                        "cursor-pointer rounded-full py-1.5 px-3 text-xs font-medium transition-all",
-                        filters.status === status
-                          ? "bg-primary/90 text-white hover:bg-primary/80"
-                          : "hover:bg-gray-100",
-                      )}
-                      onClick={() => setFilters({ ...filters, status: status as typeof filters.status })}
+                      variant="secondary"
+                      className="flex items-center gap-1.5 py-1 px-2 bg-gray-100/80"
                     >
-                      {status === "tous" ? "Tous" :
-                       status === "actif" ? "Actif" :
-                       status === "renovation" ? "En rénovation" :
-                       "Monument Historique"}
+                      <Tag className="h-3 w-3" />
+                      <span className="text-gray-600">+{remainingCount} autres</span>
                     </Badge>
-                  ))}
-                </div>
-              </div>
-
-              {/* Additional Filters */}
-              <div>
-                <h4 className="font-medium text-sm mb-3 flex items-center">
-                  <ListFilter className="h-4 w-4 mr-2 text-gray-500" />
-                  Filtres additionnels
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  <Badge
-                    variant={filters.hasActiveLeases ? "default" : "outline"}
-                    className={cn(
-                      "cursor-pointer rounded-full py-1.5 px-3 text-xs font-medium transition-all",
-                      filters.hasActiveLeases
-                        ? "bg-primary/90 text-white hover:bg-primary/80"
-                        : "hover:bg-gray-100",
-                    )}
-                    onClick={() => setFilters({ ...filters, hasActiveLeases: !filters.hasActiveLeases })}
-                  >
-                    <Briefcase className="h-3.5 w-3.5 mr-1.5 inline-block" />
-                    Bails actifs
-                  </Badge>
-                  <Badge
-                    variant={filters.hasActiveProjects ? "default" : "outline"}
-                    className={cn(
-                      "cursor-pointer rounded-full py-1.5 px-3 text-xs font-medium transition-all",
-                      filters.hasActiveProjects
-                        ? "bg-primary/90 text-white hover:bg-primary/80"
-                        : "hover:bg-gray-100",
-                    )}
-                    onClick={() => setFilters({ ...filters, hasActiveProjects: !filters.hasActiveProjects })}
-                  >
-                    <Wrench className="h-3.5 w-3.5 mr-1.5 inline-block" />
-                    Projets en cours
-                  </Badge>
-                  <Badge
-                    variant={filters.hasOpenTasks ? "default" : "outline"}
-                    className={cn(
-                      "cursor-pointer rounded-full py-1.5 px-3 text-xs font-medium transition-all",
-                      filters.hasOpenTasks
-                        ? "bg-primary/90 text-white hover:bg-primary/80"
-                        : "hover:bg-gray-100",
-                    )}
-                    onClick={() => setFilters({ ...filters, hasOpenTasks: !filters.hasOpenTasks })}
-                  >
-                    <Clock className="h-3.5 w-3.5 mr-1.5 inline-block" />
-                    Tâches ouvertes
-                  </Badge>
-                </div>
-              </div>
-
-              <div className="flex justify-end pt-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={resetFilters} 
-                  className="text-xs bg-white hover:bg-gray-100"
-                >
-                  <RefreshCcw className="h-3.5 w-3.5 mr-1.5" />
-                  Réinitialiser les filtres
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  )}
+                </>
+              )
+            })()}
+          </div>
+        </div>
+      )}
 
       {/* Résultats de recherche */}
       <AnimatePresence>
@@ -513,43 +433,196 @@ export function PropertySearch() {
             transition={{ duration: 0.2 }}
             className={cn(
               "border-x border-b border-gray-200/70 rounded-b-2xl bg-white/95 backdrop-blur-sm shadow-lg",
-              "max-h-[calc(100vh-200px)] overflow-y-auto",
+              "h-[calc(100vh-180px)] flex flex-col", // Set fixed height and make it a flex container
             )}
           >
-            <div className="sticky top-0 z-10 flex justify-between items-center p-3 border-b bg-white/90 backdrop-blur-sm">
-              <div className="text-sm font-medium text-gray-700">
-                {filteredProperties.length} résultat{filteredProperties.length !== 1 ? "s" : ""}
+            <div className="flex flex-col">
+              {/* Results header */}
+              <div className="sticky top-0 z-10 flex justify-between items-center p-3 border-b bg-white/90 backdrop-blur-sm">
+                <div className="flex items-center gap-2">
+                  <div className="text-sm font-medium text-gray-700">
+                    {filteredProperties.length} résultat{filteredProperties.length !== 1 ? "s" : ""}
+                  </div>
+                  {filteredProperties.length > 0 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={cn(
+                        "h-8 w-8 p-0 hover:bg-gray-100/50 rounded-full transition-colors duration-150",
+                        showFilters && "bg-gray-100/80",
+                      )}
+                      onClick={() => setShowFilters(!showFilters)}
+                    >
+                      <ListFilter className="h-4 w-4 text-gray-500" />
+                      <span className="sr-only">Filtres</span>
+                    </Button>
+                  )}
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsExpanded(false)}
+                  className="text-xs flex items-center gap-1 text-gray-500 hover:text-gray-700"
+                >
+                  <ChevronDown className="h-4 w-4" />
+                  <span className="sr-only md:not-sr-only">Réduire</span>
+                </Button>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsExpanded(false)}
-                className="text-xs flex items-center gap-1 text-gray-500 hover:text-gray-700"
-              >
-                <ChevronUp className="h-4 w-4" />
-                <span className="sr-only md:not-sr-only">Réduire</span>
-              </Button>
+
+              {/* Filters section - now directly under the header */}
+              <AnimatePresence>
+                {showFilters && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden bg-white/95 backdrop-blur-sm border-b border-gray-200/70"
+                  >
+                    <div className="p-4 space-y-6">
+                      {/* Type de propriété */}
+                      <div>
+                        <h4 className="font-medium text-sm mb-3 flex items-center">
+                          <Building2 className="h-4 w-4 mr-2 text-gray-500" />
+                          Type de propriété
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {Object.keys(filters)
+                            .slice(0, 5)
+                            .map((key) => (
+                              <Badge
+                                key={key}
+                                variant={filters[key as keyof Filters] ? "default" : "outline"}
+                                className={cn(
+                                  "cursor-pointer rounded-full py-1.5 px-3 text-xs font-medium transition-all",
+                                  filters[key as keyof Filters]
+                                    ? "bg-primary/90 text-white hover:bg-primary/80"
+                                    : "hover:bg-gray-100",
+                                )}
+                                onClick={() => setFilters({ ...filters, [key]: !filters[key as keyof Filters] })}
+                              >
+                                {key.charAt(0).toUpperCase() + key.slice(1)}
+                              </Badge>
+                            ))}
+                        </div>
+                      </div>
+
+                      {/* Statut */}
+                      <div>
+                        <h4 className="font-medium text-sm mb-3 flex items-center">
+                          <FileText className="h-4 w-4 mr-2 text-gray-500" />
+                          Statut
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {["tous", "actif", "renovation", "historique"].map((status) => (
+                            <Badge
+                              key={status}
+                              variant={filters.status === status ? "default" : "outline"}
+                              className={cn(
+                                "cursor-pointer rounded-full py-1.5 px-3 text-xs font-medium transition-all",
+                                filters.status === status
+                                  ? "bg-primary/90 text-white hover:bg-primary/80"
+                                  : "hover:bg-gray-100",
+                              )}
+                              onClick={() => setFilters({ ...filters, status: status as typeof filters.status })}
+                            >
+                              {status === "tous" ? "Tous" :
+                               status === "actif" ? "Actif" :
+                               status === "renovation" ? "En rénovation" :
+                               "Monument Historique"}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Additional Filters */}
+                      <div>
+                        <h4 className="font-medium text-sm mb-3 flex items-center">
+                          <ListFilter className="h-4 w-4 mr-2 text-gray-500" />
+                          Filtres additionnels
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          <Badge
+                            variant={filters.hasActiveLeases ? "default" : "outline"}
+                            className={cn(
+                              "cursor-pointer rounded-full py-1.5 px-3 text-xs font-medium transition-all",
+                              filters.hasActiveLeases
+                                ? "bg-primary/90 text-white hover:bg-primary/80"
+                                : "hover:bg-gray-100",
+                            )}
+                            onClick={() => setFilters({ ...filters, hasActiveLeases: !filters.hasActiveLeases })}
+                          >
+                            <Briefcase className="h-3.5 w-3.5 mr-1.5 inline-block" />
+                            Baux actifs
+                          </Badge>
+                          <Badge
+                            variant={filters.hasActiveProjects ? "default" : "outline"}
+                            className={cn(
+                              "cursor-pointer rounded-full py-1.5 px-3 text-xs font-medium transition-all",
+                              filters.hasActiveProjects
+                                ? "bg-primary/90 text-white hover:bg-primary/80"
+                                : "hover:bg-gray-100",
+                            )}
+                            onClick={() => setFilters({ ...filters, hasActiveProjects: !filters.hasActiveProjects })}
+                          >
+                            <Wrench className="h-3.5 w-3.5 mr-1.5 inline-block" />
+                            Projets en cours
+                          </Badge>
+                          <Badge
+                            variant={filters.hasOpenTasks ? "default" : "outline"}
+                            className={cn(
+                              "cursor-pointer rounded-full py-1.5 px-3 text-xs font-medium transition-all",
+                              filters.hasOpenTasks
+                                ? "bg-primary/90 text-white hover:bg-primary/80"
+                                : "hover:bg-gray-100",
+                            )}
+                            onClick={() => setFilters({ ...filters, hasOpenTasks: !filters.hasOpenTasks })}
+                          >
+                            <Clock8 className="h-3.5 w-3.5 mr-1.5 inline-block" />
+                            Tâches ouvertes
+                          </Badge>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-end pt-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={resetFilters} 
+                          className="text-xs bg-white hover:bg-gray-100"
+                        >
+                          <RefreshCcw className="h-3.5 w-3.5 mr-1.5" />
+                          Réinitialiser les filtres
+                        </Button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
-            <div className="p-3 space-y-3">
-              {filteredProperties.length ? (
-                filteredProperties.map((property) => (
-                  <PropertyCard
-                    key={property.id}
-                    property={property as Property}
-                    onClick={() => {
-                      setSelectedProperty(property as Property)
-                      setShowDetail(true)
-                    }}
-                  />
-                ))
-              ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <MapPin className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                  <p className="font-medium">Aucune propriété trouvée</p>
-                  <p className="text-sm mt-1">Essayez de modifier vos critères de recherche</p>
-                </div>
-              )}
+            {/* Results list - now scrollable within its container */}
+            <div className="overflow-y-auto flex-1">
+              <div className="p-3 space-y-3">
+                {filteredProperties.length ? (
+                  filteredProperties.map((property) => (
+                    <PropertyCard
+                      key={property.id}
+                      property={property}
+                      onClick={() => {
+                        setSelectedProperty(property)
+                        setShowDetail(true)
+                      }}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-gray-500">
+                    <MapPin className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                    <p className="font-medium">Aucune propriété trouvée</p>
+                    <p className="text-sm mt-1">Essayez de modifier vos critères de recherche</p>
+                  </div>
+                )}
+              </div>
             </div>
           </motion.div>
         )}
