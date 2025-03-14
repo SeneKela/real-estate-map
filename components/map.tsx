@@ -5,7 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
 import { properties } from "@/lib/data"
-import { Property } from "@/lib/types"
+import { Property } from "@/types/property"
 
 // Fix for default marker icons in Next.js
 const icon = L.icon({
@@ -66,6 +66,9 @@ export function Map({ selectedProperty, onPropertySelect }: { selectedProperty: 
   const [center, setCenter] = useState<[number, number]>([46.603354, 1.888334]) // Center of France
   const mapRef = useRef<L.Map>(null)
 
+  // Cast properties to Property[] type
+  const typedProperties = properties as Property[]
+
   useEffect(() => {
     if (selectedProperty && mapRef.current) {
       mapRef.current.setView([selectedProperty.latitude, selectedProperty.longitude], 15)
@@ -84,7 +87,7 @@ export function Map({ selectedProperty, onPropertySelect }: { selectedProperty: 
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {properties.map((property) => (
+        {typedProperties.map((property) => (
           <CustomMarker
             key={property.id}
             property={property}
