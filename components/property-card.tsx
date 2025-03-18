@@ -180,7 +180,7 @@ export function PropertyCard({ property, onClick }: PropertyCardProps) {
           {activeLeases > 0 && (
             <Badge variant="outline" className="rounded-full text-xs py-1 px-3 border-gray-300 text-gray-700 flex items-center">
               <Briefcase className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
-              {activeLeases} Bail{activeLeases > 1 ? "s" : ""} actif{activeLeases > 1 ? "s" : ""}
+              {activeLeases} {activeLeases > 2 ? "Baux" : activeLeases > 1 ? "Bails" : "Bail"} actif{activeLeases > 1 ? "s" : ""}
             </Badge>
           )}
           {activeProjects > 0 && (
