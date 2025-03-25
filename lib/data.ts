@@ -218,44 +218,131 @@ export const properties = [
     ],
     "bails": [
       {
-        "reference": "BERCY-2023-001",
-        "locataire": "Direction Générale des Finances Publiques",
-        "surface": 5000,
-        "loyer": 0,
-        "dateDebut": "2023-01-01",
-        "dateFin": "2027-12-31",
-        "actif": true,
+        "leaseId": "FR-GOV-RE-BERCY-001",
+        "title": "FR-GOV-RE-BERCY-001-60 mois Ministère de l'Économie Lease",
+        "status": "Propriété Gouvernementale",
+        "general": {
+          "leaseDetails": {
+            "type": "Bail gouvernemental",
+            "primaryUse": "Administration centrale",
+            "baseYear": "2023"
+          },
+          "financialDetails": {
+            "rent": "1,00 € EUR",
+            "accountingType": "Budget de l'État",
+            "paymentTerms": "Alloué annuellement"
+          }
+        },
+        "dates": {
+          "start": "01/01/2023",
+          "duration": "60 mois",
+          "end": "31/12/2027"
+        },
+        "parties": {
+          "tenant": {
+            "organization": "République Française\\Ministère de l'Économie",
+            "legalName": "Direction Générale des Finances Publiques",
+            "id": "FR-DGFIP-001",
+            "location": "139 Rue de Bercy, 75012 Paris"
+          }
+        },
+        "terms": {
+          "securityRequirements": [
+            "Sécurité ministérielle",
+            "Contrôle d'accès renforcé",
+            "Protection des données sensibles",
+            "Surveillance 24/7",
+            "Plan de continuité d'activité"
+          ]
+        },
+        "metadata": {
+          "lastUpdated": "15/12/2022"
+        },
         "sous_bails": [
           {
             "reference": "BERCY_2E4",
-            "locataire": "DGFiP",
+            "locataire": "DGFiP - Direction des Grandes Entreprises",
             "surface": 3000,
             "loyer": 0,
-            "dateDebut": "2023-01-01",
-            "dateFin": "2027-12-31",
+            "dateDebut": "01/01/2023",
+            "dateFin": "31/12/2027",
             "actif": true,
             "type": "Bail Interne"
           },
           {
             "reference": "BERCY_2E5",
-            "locataire": "DGFiP - Service des Impôts",
+            "locataire": "DGFiP - Service des Impôts des Entreprises",
             "surface": 2000,
             "loyer": 0,
-            "dateDebut": "2023-01-01",
-            "dateFin": "2027-12-31",
+            "dateDebut": "01/01/2023",
+            "dateFin": "31/12/2027",
             "actif": true,
             "type": "Bail Interne"
           }
         ]
       },
       {
-        "reference": "BERCY-2022-002",
-        "locataire": "Direction Générale du Trésor",
-        "surface": 3500,
-        "loyer": 0,
-        "dateDebut": "2022-01-01",
-        "dateFin": "2026-12-31",
-        "actif": true
+        "leaseId": "FR-GOV-RE-BERCY-002",
+        "title": "FR-GOV-RE-BERCY-002-48 mois Direction Générale du Trésor Lease",
+        "status": "Propriété Gouvernementale",
+        "general": {
+          "leaseDetails": {
+            "type": "Bail gouvernemental",
+            "primaryUse": "Services financiers",
+            "baseYear": "2022"
+          },
+          "financialDetails": {
+            "rent": "1,00 € EUR",
+            "accountingType": "Budget de l'État",
+            "paymentTerms": "Alloué annuellement"
+          }
+        },
+        "dates": {
+          "start": "01/01/2022",
+          "duration": "48 mois",
+          "end": "31/12/2025"
+        },
+        "parties": {
+          "tenant": {
+            "organization": "République Française\\Ministère de l'Économie",
+            "legalName": "Direction Générale du Trésor",
+            "id": "FR-DGT-001",
+            "location": "139 Rue de Bercy, 75012 Paris"
+          }
+        },
+        "terms": {
+          "securityRequirements": [
+            "Sécurité renforcée",
+            "Contrôle d'accès",
+            "Protection des données financières",
+            "Surveillance permanente"
+          ]
+        },
+        "metadata": {
+          "lastUpdated": "20/12/2021"
+        },
+        "sous_bails": [
+          {
+            "reference": "BERCY_3E1",
+            "locataire": "DG Trésor - Service des Affaires Multilatérales",
+            "surface": 2000,
+            "loyer": 0,
+            "dateDebut": "01/01/2022",
+            "dateFin": "31/12/2025",
+            "actif": true,
+            "type": "Bail Interne"
+          },
+          {
+            "reference": "BERCY_3E2",
+            "locataire": "DG Trésor - Service des Politiques Macroéconomiques",
+            "surface": 1500,
+            "loyer": 0,
+            "dateDebut": "01/01/2022",
+            "dateFin": "31/12/2025",
+            "actif": true,
+            "type": "Bail Interne"
+          }
+        ]
       }
     ],
     "projets": [

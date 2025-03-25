@@ -1114,7 +1114,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                                       {sousBail.type}
                                                     </Badge>
                                                   </div>
-                                                  <Badge variant={sousBail.actif ? "outline" : "secondary"}>
+                                                  <Badge variant="default">
                                                     {sousBail.actif ? "Actif" : "Inactif"}
                                                   </Badge>
                                                 </div>
