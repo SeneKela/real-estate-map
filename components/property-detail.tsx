@@ -1100,53 +1100,57 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                     {/* Add sub-leases section */}
                                     {bail.sous_bails && bail.sous_bails.length > 0 && (
                                       <div className="border-t border-gray-200 dark:border-gray-800">
-                                        <div className="p-4">
-                                          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-                                            <FileText className="h-4 w-4 mr-2 text-gray-500" />
+                                        <div className="p-6">
+                                          <h4 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
+                                            <FileText className="h-5 w-5 mr-2 text-gray-500" />
                                             Sous-baux
                                           </h4>
-                                          {bail.sous_bails.map((sousBail, idx) => (
-                                            <div key={idx} className="mb-4 last:mb-0">
-                                              <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
-                                                <div className="flex items-center justify-between mb-3">
-                                                  <div className="flex items-center">
-                                                    <Badge variant="default">
-                                                      {sousBail.type}
+                                          <div className="space-y-4">
+                                            {bail.sous_bails.map((sousBail, idx) => (
+                                              <div key={idx} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden">
+                                                <div className="p-4 border-b border-gray-100 dark:border-gray-800">
+                                                  <div className="flex items-center justify-between mb-3">
+                                                    <div className="flex items-center gap-2">
+                                                      <Badge variant="default" className="bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300">
+                                                        {sousBail.type}
+                                                      </Badge>
+                                                    </div>
+                                                    <Badge variant="default" className={sousBail.actif ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300" : "bg-gray-50 text-gray-700 dark:bg-gray-900/20 dark:text-gray-300"}>
+                                                      {sousBail.actif ? "Actif" : "Inactif"}
                                                     </Badge>
                                                   </div>
-                                                  <Badge variant="default" className={sousBail.actif ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"}>
-                                                    {sousBail.actif ? "Actif" : "Inactif"}
-                                                  </Badge>
-                                                </div>
-                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                                  <div>
-                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Référence</p>
-                                                    <p className="text-sm font-medium">{sousBail.reference}</p>
-                                                  </div>
-                                                  <div>
-                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Locataire</p>
-                                                    <p className="text-sm font-medium">{sousBail.locataire}</p>
-                                                  </div>
-                                                  <div>
-                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Surface</p>
-                                                    <p className="text-sm font-medium">{sousBail.surface} m²</p>
+                                                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                    <div className="space-y-1">
+                                                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Référence</p>
+                                                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.reference}</p>
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Locataire</p>
+                                                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.locataire}</p>
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Surface</p>
+                                                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.surface.toLocaleString()} m²</p>
+                                                    </div>
                                                   </div>
                                                 </div>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-                                                  <div>
-                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Loyer annuel</p>
-                                                    <p className="text-sm font-medium">{formatPrice(sousBail.loyer || 0)}</p>
-                                                  </div>
-                                                  <div>
-                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Période</p>
-                                                    <p className="text-sm font-medium">
-                                                      {formatDate(sousBail.dateDebut)} - {formatDate(sousBail.dateFin)}
-                                                    </p>
+                                                <div className="p-4 bg-gray-50 dark:bg-gray-900/50">
+                                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div className="space-y-1">
+                                                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Loyer annuel</p>
+                                                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{formatPrice(sousBail.loyer || 0)}</p>
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Période</p>
+                                                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                                        {formatDate(sousBail.dateDebut)} - {formatDate(sousBail.dateFin)}
+                                                      </p>
+                                                    </div>
                                                   </div>
                                                 </div>
                                               </div>
-                                            </div>
-                                          ))}
+                                            ))}
+                                          </div>
                                         </div>
                                       </div>
                                     )}
