@@ -16,6 +16,17 @@ interface Bail {
   leaseId?: string
   title?: string
   status?: "actif" | "inactif" | "Propriété Gouvernementale"
+  type?: string
+  sous_bails?: {
+    reference: string
+    locataire: string
+    surface: number
+    loyer: number
+    dateDebut: string
+    dateFin: string
+    actif: boolean
+    type: string
+  }[]
   general?: {
     leaseDetails?: {
       type?: string

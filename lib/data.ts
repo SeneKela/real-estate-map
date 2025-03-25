@@ -224,7 +224,29 @@ export const properties = [
         "loyer": 0,
         "dateDebut": "2023-01-01",
         "dateFin": "2027-12-31",
-        "actif": true
+        "actif": true,
+        "sous_bails": [
+          {
+            "reference": "BERCY_2E4",
+            "locataire": "DGFiP",
+            "surface": 3000,
+            "loyer": 0,
+            "dateDebut": "2023-01-01",
+            "dateFin": "2027-12-31",
+            "actif": true,
+            "type": "Bail Interne"
+          },
+          {
+            "reference": "BERCY_2E5",
+            "locataire": "DGFiP - Service des Impôts",
+            "surface": 2000,
+            "loyer": 0,
+            "dateDebut": "2023-01-01",
+            "dateFin": "2027-12-31",
+            "actif": true,
+            "type": "Bail Interne"
+          }
+        ]
       },
       {
         "reference": "BERCY-2022-002",

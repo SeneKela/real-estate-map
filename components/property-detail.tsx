@@ -71,9 +71,20 @@ interface Bail {
   loyer?: number
   dateDebut?: string
   dateFin?: string
+  type?: string
   leaseId?: string
   title?: string
   status?: "actif" | "inactif" | "Propriété Gouvernementale"
+  sous_bails?: {
+    reference: string
+    locataire: string
+    surface: number
+    loyer: number
+    dateDebut: string
+    dateFin: string
+    actif: boolean
+    type: string
+  }[]
   general?: {
     leaseDetails?: {
       type?: string
@@ -1085,8 +1096,61 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                             </div>
                                           </div>
                                         )}
-            </CardContent>
-                                    <CardFooter className="bg-gray-50 dark:bg-gray-900 p-4 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center">
+                                    </CardContent>
+                                    {/* Add sub-leases section */}
+                                    {bail.sous_bails && bail.sous_bails.length > 0 && (
+                                      <div className="border-t border-gray-200 dark:border-gray-800">
+                                        <div className="p-4">
+                                          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                                            <FileText className="h-4 w-4 mr-2 text-gray-500" />
+                                            Sous-baux
+                                          </h4>
+                                          {bail.sous_bails.map((sousBail, idx) => (
+                                            <div key={idx} className="mb-4 last:mb-0">
+                                              <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
+                                                <div className="flex items-center justify-between mb-3">
+                                                  <div className="flex items-center">
+                                                    <Badge variant="default">
+                                                      {sousBail.type}
+                                                    </Badge>
+                                                  </div>
+                                                  <Badge variant={sousBail.actif ? "outline" : "secondary"}>
+                                                    {sousBail.actif ? "Actif" : "Inactif"}
+                                                  </Badge>
+                                                </div>
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                  <div>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Référence</p>
+                                                    <p className="text-sm font-medium">{sousBail.reference}</p>
+                                                  </div>
+                                                  <div>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Locataire</p>
+                                                    <p className="text-sm font-medium">{sousBail.locataire}</p>
+                                                  </div>
+                                                  <div>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Surface</p>
+                                                    <p className="text-sm font-medium">{sousBail.surface} m²</p>
+                                                  </div>
+                                                </div>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                                                  <div>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Loyer annuel</p>
+                                                    <p className="text-sm font-medium">{formatPrice(sousBail.loyer || 0)}</p>
+                                                  </div>
+                                                  <div>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Période</p>
+                                                    <p className="text-sm font-medium">
+                                                      {formatDate(sousBail.dateDebut)} - {formatDate(sousBail.dateFin)}
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    )}
+                                    <CardFooter className="bg-gray-50 dark:bg-gray-900 p-4 border-t border-gray-200 dark:border-gray-800 flex justify-end">
                                       <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2">
                                         <Clock className="h-4 w-4" />
                                         Dernière mise à jour: {bail.metadata?.lastUpdated || "Non spécifié"}
@@ -1289,7 +1353,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                   <div>
                                     <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
                                       <Clock8 className="h-4 w-4 mr-2 text-gray-500" />
-                                      Tâches ({detailedProject.tasks.total_count})
+                                      Tâches principales
                                     </h4>
                                     <div className="space-y-4">
                                       <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
