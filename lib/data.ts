@@ -267,7 +267,17 @@ export const properties = [
             "dateDebut": "01/01/2023",
             "dateFin": "31/12/2027",
             "actif": true,
-            "type": "Bail Interne"
+            "type": "Bail Interne",
+            "tauxOccupation": 95,
+            "occupationActuelle": 285,
+            "capaciteMax": 300,
+            "description": "Direction en charge du contrôle fiscal des grandes entreprises",
+            "installations": [
+              "Bureaux administratifs",
+              "Salle de réunion",
+              "Archives",
+              "Parking dédié"
+            ]
           },
           {
             "reference": "BERCY_2E5",
@@ -277,7 +287,17 @@ export const properties = [
             "dateDebut": "01/01/2023",
             "dateFin": "31/12/2027",
             "actif": true,
-            "type": "Bail Interne"
+            "type": "Bail Interne",
+            "tauxOccupation": 90,
+            "occupationActuelle": 180,
+            "capaciteMax": 200,
+            "description": "Service en charge de la gestion des impôts des entreprises",
+            "installations": [
+              "Bureaux administratifs",
+              "Centre de traitement",
+              "Salle d'archives",
+              "Zone de repos"
+            ]
           }
         ]
       },
@@ -330,7 +350,17 @@ export const properties = [
             "dateDebut": "01/01/2022",
             "dateFin": "31/12/2025",
             "actif": true,
-            "type": "Bail Interne"
+            "type": "Bail Interne",
+            "tauxOccupation": 85,
+            "occupationActuelle": 170,
+            "capaciteMax": 200,
+            "description": "Service en charge des relations financières internationales",
+            "installations": [
+              "Bureaux diplomatiques",
+              "Salle de conférence",
+              "Centre de documentation",
+              "Zone de réception"
+            ]
           },
           {
             "reference": "BERCY_3E2",
@@ -340,7 +370,17 @@ export const properties = [
             "dateDebut": "01/01/2022",
             "dateFin": "31/12/2025",
             "actif": true,
-            "type": "Bail Interne"
+            "type": "Bail Interne",
+            "tauxOccupation": 88,
+            "occupationActuelle": 132,
+            "capaciteMax": 150,
+            "description": "Service en charge de l'analyse macroéconomique",
+            "installations": [
+              "Bureaux d'étude",
+              "Salle d'analyse",
+              "Centre de données",
+              "Espace de travail collaboratif"
+            ]
           }
         ]
       }

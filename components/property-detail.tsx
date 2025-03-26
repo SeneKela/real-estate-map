@@ -84,6 +84,11 @@ interface Bail {
     dateFin: string
     actif: boolean
     type: string
+    tauxOccupation: number
+    occupationActuelle: number
+    capaciteMax: number
+    description: string
+    installations: string[]
   }[]
   general?: {
     leaseDetails?: {
@@ -1148,6 +1153,65 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                                     </div>
                                                   </div>
                                                 </div>
+                                                <div className="p-4 border-t border-gray-100 dark:border-gray-800">
+                                                  <div className="space-y-4">
+                                                    <div>
+                                                      <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+                                                        <Users className="h-4 w-4 mr-2 text-gray-500" />
+                                                        Occupation
+                                                      </h5>
+                                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
+                                                          <div className="flex justify-between items-center mb-2">
+                                                            <span className="text-xs text-gray-500 dark:text-gray-400">Taux d'occupation</span>
+                                                            <span className="text-sm font-medium">{sousBail.tauxOccupation}%</span>
+                                                          </div>
+                                                          <Progress
+                                                            value={sousBail.tauxOccupation}
+                                                            className={cn("h-2 bg-gray-100 dark:bg-gray-700", getProgressColor(sousBail.tauxOccupation))}
+                                                          />
+                                                        </div>
+                                                        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
+                                                          <div className="flex justify-between items-center">
+                                                            <span className="text-xs text-gray-500 dark:text-gray-400">Personnes</span>
+                                                            <span className="text-sm font-medium">
+                                                              {sousBail.occupationActuelle} / {sousBail.capaciteMax}
+                                                            </span>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <div>
+                                                      <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+                                                        <Info className="h-4 w-4 mr-2 text-gray-500" />
+                                                        Description
+                                                      </h5>
+                                                      <p className="text-sm text-gray-600 dark:text-gray-400">{sousBail.description}</p>
+                                                    </div>
+                                                    <div>
+                                                      <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+                                                        <Layers className="h-4 w-4 mr-2 text-gray-500" />
+                                                        Installations
+                                                      </h5>
+                                                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                                        {sousBail.installations.map((installation, index) => {
+                                                          const Icon = getInstallationIcon(installation)
+                                                          return (
+                                                            <div
+                                                              key={index}
+                                                              className="flex items-center p-2 rounded-md bg-white dark:bg-gray-800"
+                                                            >
+                                                              <div className="h-6 w-6 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mr-2">
+                                                                <Icon className="h-3.5 w-3.5 text-gray-600 dark:text-gray-400" />
+                                                              </div>
+                                                              <span className="text-xs">{installation}</span>
+                                                            </div>
+                                                          )
+                                                        })}
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
                                               </div>
                                             ))}
                                           </div>
@@ -1191,7 +1255,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                           </p>
                                         </div>
                                       </div>
-                                    </CardContent>
+            </CardContent>
                                     <CardFooter className="bg-gray-50 dark:bg-gray-900 p-4 border-t border-gray-200 dark:border-gray-800 flex justify-end">
                                       <Button variant="outline" size="sm" className="text-xs flex items-center gap-1">
                                         <ExternalLink className="h-3.5 w-3.5" />
