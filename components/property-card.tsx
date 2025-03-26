@@ -128,7 +128,12 @@ export function PropertyCard({ property, onClick }: PropertyCardProps) {
   }
 
   // Count active items
-  const activeLeases = property.bails?.filter((bail: Bail) => bail.actif).length || 0
+  const activeLeases = property.bails?.filter((bail: Bail) => {
+    if ('leaseId' in bail) {
+      return bail.status === "actif" || bail.status === "Propriété Gouvernementale"
+    }
+    return bail.actif
+  }).length || 0
   const activeProjects = property.projets?.filter((projet: Projet) => projet.actif).length || 0
   const openTasks = property.taches?.length || 0
 

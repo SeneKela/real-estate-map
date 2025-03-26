@@ -453,7 +453,12 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
   const securityBadgeConfig = getSecurityBadgeConfig(property.niveauSecurite)
 
   // Calculer les statistiques
-  const activeLeases = property.bails?.filter((bail) => bail.actif).length || 0
+  const activeLeases = property.bails?.filter((bail) => {
+    if ('leaseId' in bail) {
+      return bail.status === "actif" || bail.status === "Propriété Gouvernementale"
+    }
+    return bail.actif
+  }).length || 0
   const activeProjects = property.projets?.filter((projet) => projet.actif).length || 0
   const openTasks = property.taches?.length || 0
   const highPriorityTasks = property.taches?.filter((tache) => tache.priorite === "haute").length || 0
@@ -1005,11 +1010,6 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                               <div className="space-y-1">
                                                 <div className="flex justify-between items-center">
                                                   <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Période</p>
-                                                  {bail.occupationActuelle !== undefined && bail.capaciteMax !== undefined && (
-                                                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                                                      {bail.occupationActuelle}/{bail.capaciteMax}
-                                                    </span>
-                                                  )}
                                                 </div>
                                                 <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                                                   {formatDate(bail.dateDebut)} - {formatDate(bail.dateFin)}
@@ -1116,7 +1116,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                         <div className="p-6">
                                           <h4 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
                                             <FileText className="h-5 w-5 mr-2 text-gray-500" />
-                                            Sous-baux
+                                            Baux Internes
                                           </h4>
                                           <div className="space-y-4">
                                             {bail.sous_bails.map((sousBail, idx) => (

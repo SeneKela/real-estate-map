@@ -228,7 +228,7 @@ export const properties = [
             "baseYear": "2023"
           },
           "financialDetails": {
-            "rent": "1,00 € EUR",
+            "rent": "0,00 € EUR",
             "accountingType": "Budget de l'État",
             "paymentTerms": "Alloué annuellement"
           }
@@ -261,7 +261,7 @@ export const properties = [
         "sous_bails": [
           {
             "reference": "BERCY_2E4",
-            "locataire": "DGFiP - Direction des Grandes Entreprises",
+            "locataire": "DGFiP - Direction Generale des Finances Publiques",
             "surface": 3000,
             "loyer": 0,
             "dateDebut": "01/01/2023",
@@ -312,7 +312,7 @@ export const properties = [
             "baseYear": "2022"
           },
           "financialDetails": {
-            "rent": "1,00 € EUR",
+            "rent": "0,00 € EUR",
             "accountingType": "Budget de l'État",
             "paymentTerms": "Alloué annuellement"
           }
@@ -320,7 +320,7 @@ export const properties = [
         "dates": {
           "start": "01/01/2022",
           "duration": "48 mois",
-          "end": "31/12/2025"
+          "end": "31/12/2027"
         },
         "parties": {
           "tenant": {
@@ -348,7 +348,7 @@ export const properties = [
             "surface": 2000,
             "loyer": 0,
             "dateDebut": "01/01/2022",
-            "dateFin": "31/12/2025",
+            "dateFin": "31/12/2027",
             "actif": true,
             "type": "Bail Interne",
             "tauxOccupation": 85,
@@ -368,7 +368,7 @@ export const properties = [
             "surface": 1500,
             "loyer": 0,
             "dateDebut": "01/01/2022",
-            "dateFin": "31/12/2025",
+            "dateFin": "31/12/2027",
             "actif": true,
             "type": "Bail Interne",
             "tauxOccupation": 88,
@@ -389,9 +389,9 @@ export const properties = [
       {
         "nom": "Réaménagement des espaces de travail",
         "responsable": "Sophie Dubois",
-        "budget": 1800000,
+        "budget": 0,
         "dateDebut": "2023-07-01",
-        "dateFin": "2024-06-30",
+        "dateFin": "2027-06-30",
         "avancement": 40,
         "description": "Transformation des espaces de travail pour favoriser la collaboration et le flex office.",
         "actif": true
@@ -516,18 +516,18 @@ export const properties = [
         "reference": "VERS-2021-001",
         "locataire": "Restaurant La Flottille",
         "surface": 350,
-        "loyer": 280000,
+        "loyer": 0,
         "dateDebut": "2021-03-01",
-        "dateFin": "2026-02-28",
+        "dateFin": "2027-02-28",
         "actif": true
       },
       {
         "reference": "VERS-2022-002",
         "locataire": "Boutique Souvenirs Royaux",
         "surface": 120,
-        "loyer": 150000,
+        "loyer": 0,
         "dateDebut": "2022-05-01",
-        "dateFin": "2025-04-30",
+        "dateFin": "2027-04-30",
         "actif": true
       }
     ],
@@ -535,9 +535,9 @@ export const properties = [
       {
         "nom": "Restauration de la Galerie des Glaces",
         "responsable": "Isabelle Blanc",
-        "budget": 2500000,
+        "budget": 0,
         "dateDebut": "2023-01-10",
-        "dateFin": "2025-06-30",
+        "dateFin": "2027-06-30",
         "avancement": 25,
         "description": "Restauration des miroirs, dorures et peintures de la célèbre Galerie des Glaces.",
         "actif": true
@@ -545,9 +545,9 @@ export const properties = [
       {
         "nom": "Réhabilitation des jardins à la française",
         "responsable": "Pierre Dumont",
-        "budget": 1800000,
+        "budget": 0,
         "dateDebut": "2022-10-01",
-        "dateFin": "2024-09-30",
+        "dateFin": "2027-09-30",
         "avancement": 40,
         "description": "Restauration des parterres, bosquets et fontaines selon les plans historiques.",
         "actif": true
@@ -671,7 +671,7 @@ export const properties = [
         "surface": 3000,
         "loyer": 0,
         "dateDebut": "2021-06-01",
-        "dateFin": "2026-05-31",
+        "dateFin": "2027-05-31",
         "actif": true
       }
     ],
@@ -679,9 +679,9 @@ export const properties = [
       {
         "nom": "Numérisation des archives",
         "responsable": "Claire Fontaine",
-        "budget": 900000,
+        "budget": 0,
         "dateDebut": "2023-05-01",
-        "dateFin": "2024-12-31",
+        "dateFin": "2027-12-31",
         "avancement": 60,
         "description": "Projet de digitalisation des archives de brevets et marques.",
         "actif": true
