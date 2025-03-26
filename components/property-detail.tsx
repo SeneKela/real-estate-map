@@ -75,6 +75,9 @@ interface Bail {
   leaseId?: string
   title?: string
   status?: "actif" | "inactif" | "Propriété Gouvernementale"
+  tauxOccupation?: number
+  occupationActuelle?: number
+  capaciteMax?: number
   sous_bails?: {
     reference: string
     locataire: string
@@ -900,7 +903,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                       <div>
                                         <h3 className="text-base font-medium">{bailTitle}</h3>
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                                          Locataire:{" "}
+                                          Occupant:{" "}
                                           {isNewFormat
                                             ? bail.parties?.tenant?.organization || bail.parties?.tenant?.legalName
                                             : bail.locataire}
@@ -993,32 +996,37 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                             <CalendarDays className="h-4 w-4 mr-2 text-gray-500" />
                                             Période du bail
                                           </h4>
-                                          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                                            <div className="flex items-center justify-between">
-                                              <div className="text-center px-4">
-                                                <span className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                  Début
-                                                </span>
-                                                <span className="block text-sm font-medium">
-                                                  {bail.dates.start || "Non spécifié"}
-                                                </span>
+                                          <div className="p-4 bg-gray-50 dark:bg-gray-900/50">
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                              <div className="space-y-1">
+                                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Loyer annuel</p>
+                                                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{formatPrice(bail.loyer || 0)}</p>
                                               </div>
-                                              <div className="text-center border-l border-r border-blue-200 dark:border-blue-800 px-4">
-                                                <span className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                  Durée
-                                                </span>
-                                                <span className="block text-sm font-medium">
-                                                  {bail.dates.duration || "Non spécifié"}
-                                                </span>
+                                              <div className="space-y-1">
+                                                <div className="flex justify-between items-center">
+                                                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Période</p>
+                                                  {bail.occupationActuelle !== undefined && bail.capaciteMax !== undefined && (
+                                                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                                                      {bail.occupationActuelle}/{bail.capaciteMax}
+                                                    </span>
+                                                  )}
+                                                </div>
+                                                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                                  {formatDate(bail.dateDebut)} - {formatDate(bail.dateFin)}
+                                                </p>
                                               </div>
-                                              <div className="text-center px-4">
-                                                <span className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                  Fin
-                                                </span>
-                                                <span className="block text-sm font-medium">
-                                                  {bail.dates.end || "Non spécifié"}
-                                                </span>
-                                              </div>
+                                              {bail.tauxOccupation !== undefined && (
+                                                <div className="space-y-1">
+                                                  <div className="flex justify-between items-center">
+                                                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Occupation</p>
+                                                    <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{bail.tauxOccupation}%</span>
+                                                  </div>
+                                                  <Progress
+                                                    value={bail.tauxOccupation}
+                                                    className={cn("h-2 bg-gray-100 dark:bg-gray-700", getProgressColor(bail.tauxOccupation))}
+                                                  />
+                                                </div>
+                                              )}
                                             </div>
                                           </div>
                                         </div>
@@ -1124,90 +1132,62 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                                       {sousBail.actif ? "Actif" : "Inactif"}
                                                     </Badge>
                                                   </div>
-                                                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                                    <div className="space-y-1">
-                                                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Référence</p>
-                                                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.reference}</p>
-                                                    </div>
-                                                    <div className="space-y-1">
-                                                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Locataire</p>
-                                                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.locataire}</p>
-                                                    </div>
-                                                    <div className="space-y-1">
-                                                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Surface</p>
-                                                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.surface.toLocaleString()} m²</p>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div className="p-4 bg-gray-50 dark:bg-gray-900/50">
-                                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div className="space-y-1">
-                                                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Loyer annuel</p>
-                                                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{formatPrice(sousBail.loyer || 0)}</p>
-                                                    </div>
-                                                    <div className="space-y-1">
-                                                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Période</p>
-                                                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                                        {formatDate(sousBail.dateDebut)} - {formatDate(sousBail.dateFin)}
-                                                      </p>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div className="p-4 border-t border-gray-100 dark:border-gray-800">
-                                                  <div className="space-y-4">
-                                                    <div>
-                                                      <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
-                                                        <Users className="h-4 w-4 mr-2 text-gray-500" />
-                                                        Occupation
-                                                      </h5>
-                                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
-                                                          <div className="flex justify-between items-center mb-2">
-                                                            <span className="text-xs text-gray-500 dark:text-gray-400">Taux d'occupation</span>
-                                                            <span className="text-sm font-medium">{sousBail.tauxOccupation}%</span>
+                                                  <div className="p-4 bg-gray-50 dark:bg-gray-900/50">
+                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                      <div className="space-y-1">
+                                                        <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Loyer annuel</p>
+                                                        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{formatPrice(sousBail.loyer || 0)}</p>
+                                                      </div>
+                                                      <div className="space-y-1">
+                                                        <div className="flex justify-between items-center">
+                                                          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Période</p>
+                                                          {sousBail.occupationActuelle !== undefined && sousBail.capaciteMax !== undefined && (
+                                                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                                                              {sousBail.occupationActuelle}/{sousBail.capaciteMax}
+                                                            </span>
+                                                          )}
+                                                        </div>
+                                                        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                                          {formatDate(sousBail.dateDebut)} - {formatDate(sousBail.dateFin)}
+                                                        </p>
+                                                      </div>
+                                                      {sousBail.tauxOccupation !== undefined && (
+                                                        <div className="space-y-1">
+                                                          <div className="flex justify-between items-center">
+                                                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Occupation</p>
+                                                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.tauxOccupation}%</span>
                                                           </div>
                                                           <Progress
                                                             value={sousBail.tauxOccupation}
                                                             className={cn("h-2 bg-gray-100 dark:bg-gray-700", getProgressColor(sousBail.tauxOccupation))}
                                                           />
                                                         </div>
-                                                        <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
-                                                          <div className="flex justify-between items-center">
-                                                            <span className="text-xs text-gray-500 dark:text-gray-400">Personnes</span>
-                                                            <span className="text-sm font-medium">
-                                                              {sousBail.occupationActuelle} / {sousBail.capaciteMax}
-                                                            </span>
-                                                          </div>
-                                                        </div>
-                                                      </div>
+                                                      )}
                                                     </div>
-                                                    <div>
-                                                      <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
-                                                        <Info className="h-4 w-4 mr-2 text-gray-500" />
-                                                        Description
-                                                      </h5>
-                                                      <p className="text-sm text-gray-600 dark:text-gray-400">{sousBail.description}</p>
-                                                    </div>
-                                                    <div>
-                                                      <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
-                                                        <Layers className="h-4 w-4 mr-2 text-gray-500" />
-                                                        Installations
-                                                      </h5>
-                                                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                                                        {sousBail.installations.map((installation, index) => {
-                                                          const Icon = getInstallationIcon(installation)
-                                                          return (
-                                                            <div
-                                                              key={index}
-                                                              className="flex items-center p-2 rounded-md bg-white dark:bg-gray-800"
-                                                            >
-                                                              <div className="h-6 w-6 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mr-2">
-                                                                <Icon className="h-3.5 w-3.5 text-gray-600 dark:text-gray-400" />
+                                                  </div>
+                                                  <div className="p-4 border-t border-gray-100 dark:border-gray-800">
+                                                    <div className="space-y-4">
+                                                      <div>
+                                                        <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+                                                          <Layers className="h-4 w-4 mr-2 text-gray-500" />
+                                                          Installations
+                                                        </h5>
+                                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                                          {sousBail.installations.map((installation, index) => {
+                                                            const Icon = getInstallationIcon(installation)
+                                                            return (
+                                                              <div
+                                                                key={index}
+                                                                className="flex items-center p-2 rounded-md bg-white dark:bg-gray-800"
+                                                              >
+                                                                <div className="h-6 w-6 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mr-2">
+                                                                  <Icon className="h-3.5 w-3.5 text-gray-600 dark:text-gray-400" />
+                                                                </div>
+                                                                <span className="text-xs">{installation}</span>
                                                               </div>
-                                                              <span className="text-xs">{installation}</span>
-                                                            </div>
-                                                          )
-                                                        })}
+                                                            )
+                                                          })}
+                                                        </div>
                                                       </div>
                                                     </div>
                                                   </div>
