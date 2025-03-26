@@ -1014,7 +1014,9 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                         <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
                                           <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Loyer</p>
                                           <p className="text-sm font-medium">
-                                            {bail.general.financialDetails.rent || "Non spécifié"}
+                                            {isNewFormat(bail) 
+                                              ? (bail.general?.financialDetails?.rent === "0" ? "Gratuit" : formatPrice(bail.general?.financialDetails?.rent || 0))
+                                              : (bail.loyer === 0 ? "Gratuit" : formatPrice(bail.loyer || 0))}
                                           </p>
                                         </div>
                                         <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
@@ -1049,8 +1051,8 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                           <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Loyer annuel</p>
                                           <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                                             {isNewFormat(bail) 
-                                              ? (bail.general?.financialDetails?.rent || "Gratuit")
-                                              : formatPrice(bail.loyer)}
+                                              ? (bail.general?.financialDetails?.rent === "0" ? "Gratuit" : formatPrice(bail.general?.financialDetails?.rent || 0))
+                                              : (bail.loyer === 0 ? "Gratuit" : formatPrice(bail.loyer || 0))}
                                           </p>
                                         </div>
                                         <div className="space-y-1">
