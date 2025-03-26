@@ -568,11 +568,11 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="flex items-center justify-center h-10 w-10 rounded-full bg-blue-50 text-blue-600 mb-2">
                     <Maximize className="h-5 w-5" />
-                  </div>
+              </div>
                   <div className="text-center">
                     <p className="text-sm text-gray-500 dark:text-gray-400">Superficie</p>
                     <p className="text-lg font-semibold">{property.superficie.toLocaleString()} m²</p>
-                  </div>
+              </div>
                 </div>
 
                 <div className="p-4 flex flex-col items-center justify-center">
@@ -1109,7 +1109,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                             </div>
                                           </div>
                                         )}
-                                    </CardContent>
+            </CardContent>
                                     {/* Add sub-leases section */}
                                     {bail.sous_bails && bail.sous_bails.length > 0 && (
                                       <div className="border-t border-gray-200 dark:border-gray-800">
@@ -1140,7 +1140,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                                     </Badge>
                                                   </div>
                                                   <div className="p-4 bg-gray-50 dark:bg-gray-900/50">
-                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                    <div className="grid grid-cols-4 gap-4">
                                                       <div className="space-y-1">
                                                         <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Loyer annuel</p>
                                                         <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{formatPrice(sousBail.loyer || 0)}</p>
