@@ -40,7 +40,7 @@ export const properties = [
             "baseYear": "2022"
           },
           "financialDetails": {
-            "rent": "1,00 € EUR",
+            "rent": "0,00 € EUR",
             "accountingType": "Budget de l'État",
             "paymentTerms": "Alloué annuellement"
           }
@@ -199,7 +199,7 @@ export const properties = [
     "type": "Administratif",
     "status": "actif",
     "ministere": "Économie",
-    "niveauSecurite": "moyen",
+    "niveauSecurite": "Elevé",
     "telephone": "01 40 04 04 04",
     "tauxOccupation": 90,
     "occupationActuelle": 2700,
@@ -219,7 +219,7 @@ export const properties = [
     "bails": [
       {
         "leaseId": "FR-GOV-RE-BERCY-001",
-        "title": "FR-GOV-RE-BERCY-001-60 mois Ministère de l'Économie Lease",
+        "title": "FR-GOV-RE-BERCY-001-60",
         "status": "Propriété Gouvernementale",
         "general": {
           "leaseDetails": {
@@ -281,7 +281,7 @@ export const properties = [
           },
           {
             "reference": "BERCY_2E5",
-            "locataire": "DGFiP - Service des Impôts des Entreprises",
+            "locataire": "DGFiP - Direction Generale des Finances Publiques",
             "surface": 2000,
             "loyer": 0,
             "dateDebut": "01/01/2023",
@@ -291,7 +291,7 @@ export const properties = [
             "tauxOccupation": 90,
             "occupationActuelle": 180,
             "capaciteMax": 200,
-            "description": "Service en charge de la gestion des impôts des entreprises",
+            "description": "Service en charge des finances publiques",
             "installations": [
               "Bureaux administratifs",
               "Centre de traitement",
@@ -303,7 +303,7 @@ export const properties = [
       },
       {
         "leaseId": "FR-GOV-RE-BERCY-002",
-        "title": "FR-GOV-RE-BERCY-002-48 mois Direction Générale du Trésor Lease",
+        "title": "FR-GOV-RE-BERCY-002",
         "status": "Propriété Gouvernementale",
         "general": {
           "leaseDetails": {
@@ -339,12 +339,12 @@ export const properties = [
           ]
         },
         "metadata": {
-          "lastUpdated": "20/12/2021"
+          "lastUpdated": "20/03/2025"
         },
         "sous_bails": [
           {
             "reference": "BERCY_3E1",
-            "locataire": "DG Trésor - Service des Affaires Multilatérales",
+            "locataire": "Direction generale du Trésor (DGT)",
             "surface": 2000,
             "loyer": 0,
             "dateDebut": "01/01/2022",
@@ -364,7 +364,7 @@ export const properties = [
           },
           {
             "reference": "BERCY_3E2",
-            "locataire": "DG Trésor - Service des Politiques Macroéconomiques",
+            "locataire": "Direction generale du Trésor (DGT)",
             "surface": 1500,
             "loyer": 0,
             "dateDebut": "01/01/2022",

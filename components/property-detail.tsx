@@ -205,9 +205,17 @@ const formatDate = (dateString: string | undefined | null): string => {
     return dateString
   }
 
-  // Sinon on utilise le format standard
-  const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" }
-  return new Date(dateString).toLocaleDateString("fr-FR", options)
+  try {
+    // Sinon on utilise le format standard
+    const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" }
+    const date = new Date(dateString)
+    if (isNaN(date.getTime())) {
+      return dateString // Return original string if date is invalid
+    }
+    return date.toLocaleDateString("fr-FR", options)
+  } catch (error) {
+    return dateString // Return original string if parsing fails
+  }
 }
 
 const formatPrice = (price: number | string): string => {
@@ -569,15 +577,15 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
               </div>
 
               {/* Statistiques rapides */}
-              <div className="grid grid-cols-4 divide-x border-b">
+              <div className="grid grid-cols-5 divide-x border-b">
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="flex items-center justify-center h-10 w-10 rounded-full bg-blue-50 text-blue-600 mb-2">
                     <Maximize className="h-5 w-5" />
-              </div>
+                  </div>
                   <div className="text-center">
                     <p className="text-sm text-gray-500 dark:text-gray-400">Superficie</p>
                     <p className="text-lg font-semibold">{property.superficie.toLocaleString()} m²</p>
-              </div>
+                  </div>
                 </div>
 
                 <div className="p-4 flex flex-col items-center justify-center">
@@ -607,6 +615,16 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                   <div className="text-center">
                     <p className="text-sm text-gray-500 dark:text-gray-400">Tâches urgentes</p>
                     <p className="text-lg font-semibold">{highPriorityTasks}</p>
+                  </div>
+                </div>
+
+                <div className="p-4 flex flex-col items-center justify-center">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-full bg-purple-50 text-purple-600 mb-2">
+                    <Clock8 className="h-5 w-5" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Total tâches</p>
+                    <p className="text-lg font-semibold">{property.taches.length}</p>
                   </div>
                 </div>
               </div>
@@ -1005,14 +1023,16 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                               <div className="space-y-1">
                                                 <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Loyer annuel</p>
-                                                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{formatPrice(bail.loyer || 0)}</p>
+                                                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                                  {bail.general?.financialDetails?.rent || formatPrice(bail.loyer || 0)}
+                                                </p>
                                               </div>
                                               <div className="space-y-1">
                                                 <div className="flex justify-between items-center">
                                                   <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Période</p>
                                                 </div>
                                                 <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                                  {formatDate(bail.dateDebut)} - {formatDate(bail.dateFin)}
+                                                  {formatDate(bail.dates.start)} - {formatDate(bail.dates.end)}
                                                 </p>
                                               </div>
                                               {bail.tauxOccupation !== undefined && (
@@ -1152,11 +1172,6 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                                       <div className="space-y-1">
                                                         <div className="flex justify-between items-center">
                                                           <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Période</p>
-                                                          {sousBail.occupationActuelle !== undefined && sousBail.capaciteMax !== undefined && (
-                                                            <span className="text-xs text-gray-500 dark:text-gray-400">
-                                                              {sousBail.occupationActuelle}/{sousBail.capaciteMax}
-                                                            </span>
-                                                          )}
                                                         </div>
                                                         <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                                                           {formatDate(sousBail.dateDebut)} - {formatDate(sousBail.dateFin)}
@@ -1164,8 +1179,14 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                                       </div>
                                                       {sousBail.tauxOccupation !== undefined && (
                                                         <div className="space-y-1">
-                                                          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Occupation</p>
-                                                          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.tauxOccupation}%</p>
+                                                          <div className="flex justify-between items-center">
+                                                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Occupation</p>
+                                                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.tauxOccupation}%</span>
+                                                          </div>
+                                                          <Progress
+                                                            value={sousBail.tauxOccupation}
+                                                            className={cn("h-2 bg-gray-100 dark:bg-gray-700", getProgressColor(sousBail.tauxOccupation))}
+                                                          />
                                                         </div>
                                                       )}
                                                     </div>
