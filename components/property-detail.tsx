@@ -1123,10 +1123,17 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                               <div key={idx} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden">
                                                 <div className="p-4 border-b border-gray-100 dark:border-gray-800">
                                                   <div className="flex items-center justify-between mb-3">
-                                                    <div className="flex items-center gap-2">
+                                                    <div className="flex items-center gap-3">
                                                       <Badge variant="default" className="bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300">
                                                         {sousBail.type}
                                                       </Badge>
+                                                      <div>
+                                                        <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
+                                                          <User className="h-4 w-4 mr-2 text-gray-500" />
+                                                          Occupant
+                                                        </h5>
+                                                        <p className="text-sm text-gray-900 dark:text-gray-100">{sousBail.locataire}</p>
+                                                      </div>
                                                     </div>
                                                     <Badge variant="default" className={sousBail.actif ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300" : "bg-gray-50 text-gray-700 dark:bg-gray-900/20 dark:text-gray-300"}>
                                                       {sousBail.actif ? "Actif" : "Inactif"}
@@ -1165,13 +1172,6 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                                   </div>
                                                   <div className="p-4 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-4">
-                                                      <div>
-                                                        <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
-                                                          <User className="h-4 w-4 mr-2 text-gray-500" />
-                                                          Occupant
-                                                        </h5>
-                                                        <p className="text-sm text-gray-900 dark:text-gray-100">{sousBail.locataire}</p>
-                                                      </div>
                                                       <div>
                                                         <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
                                                           <Layers className="h-4 w-4 mr-2 text-gray-500" />
