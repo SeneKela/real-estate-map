@@ -276,34 +276,34 @@ export const properties = [
             "surface": 1000,
             "loyer": 0,
             "dateDebut": "01/01/2022",
-            "dateFin": "31/12/2027",
+            "dateFin": "31/12/2025",
             "actif": true,
             "type": "Bail Interne",
-            "tauxOccupation": 85,
-            "dateDeRenouvellement": "31/06/2026"
+            "tauxOccupation": 83,
+            "dateDeRenouvellement": "31/06/2025"
           },
           {
             "reference": "DGFiP_1",
             "locataire": "Direction generale des Finances Publiques (DGFiP)",
             "surface": 2500,
             "loyer": 0,
-            "dateDebut": "01/01/2022",
-            "dateFin": "31/12/2027",
+            "dateDebut": "01/01/2023",
+            "dateFin": "31/12/2026",
             "actif": true,
             "type": "Bail Interne",
-            "tauxOccupation": 85,
-            "dateDeRenouvellement": "31/06/2026"
+            "tauxOccupation": 81,
+            "dateDeRenouvellement": "31/06/2025"
           },
           {
             "reference": "DGT_1",
             "locataire": "Direction generale du Trésor (DGT)",
             "surface": 1200,
             "loyer": 0,
-            "dateDebut": "01/01/2022",
+            "dateDebut": "31/02/2022",
             "dateFin": "31/12/2027",
             "actif": true,
             "type": "Bail Interne",
-            "tauxOccupation": 85,
+            "tauxOccupation": 92,
             "dateDeRenouvellement": "31/06/2026"
           },
           {
@@ -311,11 +311,11 @@ export const properties = [
             "locataire": "Institut National de la statistique et des études Economiques (Insee)",
             "surface": 2000,
             "loyer": 0,
-            "dateDebut": "01/01/2022",
+            "dateDebut": "01/04/2024",
             "dateFin": "31/12/2027",
             "actif": true,
             "type": "Bail Interne",
-            "tauxOccupation": 85,
+            "tauxOccupation": 76,
             "dateDeRenouvellement": "31/06/2026"
           },
           {
@@ -323,11 +323,11 @@ export const properties = [
             "locataire": "Inspection generale des finances (IGF)",
             "surface": 4000,
             "loyer": 0,
-            "dateDebut": "01/01/2022",
+            "dateDebut": "01/06/2023",
             "dateFin": "31/12/2027",
             "actif": true,
             "type": "Bail Interne",
-            "tauxOccupation": 85,
+            "tauxOccupation": 88,
             "dateDeRenouvellement": "31/06/2026"
           },
           {
@@ -335,11 +335,11 @@ export const properties = [
             "locataire": "Direction generale de la concurrence, de la consommation et de la repression des fraudes (DGCCRF)",
             "surface": 4400,
             "loyer": 0,
-            "dateDebut": "01/01/2022",
+            "dateDebut": "01/10/2023",
             "dateFin": "31/12/2027",
             "actif": true,
             "type": "Bail Interne",
-            "tauxOccupation": 85,
+            "tauxOccupation": 92,
             "dateDeRenouvellement": "31/06/2026"
           }
         ]

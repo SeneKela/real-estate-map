@@ -1049,7 +1049,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                           <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Loyer annuel</p>
                                           <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                                             {isNewFormat(bail) 
-                                              ? (bail.general?.financialDetails?.rent || "Non spécifié")
+                                              ? (bail.general?.financialDetails?.rent || "Gratuit")
                                               : formatPrice(bail.loyer)}
                                           </p>
                                         </div>
@@ -1064,8 +1064,8 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                             {isNewFormat(bail)
                                               ? `${formatDate(bail.dates?.start)} - ${formatDate(bail.dates?.end)}`
                                               : `${formatDate(bail.dateDebut)} - ${formatDate(bail.dateFin)}`}
-                                          </p>
-                                        </div>
+                  </p>
+                </div>
                                         {bail.tauxOccupation !== undefined && (
                                           <div className="space-y-1">
                                             <div className="flex justify-between items-center">
@@ -1082,81 +1082,9 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                     </div>
                                   </div>
 
-                                  {/* Sous-bails */}
-                                  {bail.sous_bails && bail.sous_bails.length > 0 && (
-                                    <div>
-                                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-                                        <Layers className="h-4 w-4 mr-2 text-gray-500" />
-                                        Sous-bails
-                                      </h4>
-                                      <div className="space-y-4">
-                                        {bail.sous_bails.map((sousBail, idx) => (
-                                          <div key={`${bail.reference}-sous-bail-${idx}`} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden">
-                                            <div className="p-4 border-b border-gray-100 dark:border-gray-800">
-                                              <div className="flex items-center justify-between mb-3">
-                                                <div className="flex items-center gap-3">
-                                                  <Badge variant="default" className="bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300">
-                                                    {sousBail.type}
-                                                  </Badge>
-                                                  <div>
-                                                    <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
-                                                      <User className="h-4 w-4 mr-2 text-gray-500" />
-                                                      Occupant
-                                                    </h5>
-                                                    <p className="text-sm text-gray-900 dark:text-gray-100">{sousBail.locataire}</p>
-                                                  </div>
-                                                </div>
-                                                <Badge variant="default" className={sousBail.actif ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300" : "bg-gray-50 text-gray-700 dark:bg-gray-900/20 dark:text-gray-300"}>
-                                                  {sousBail.actif ? "Actif" : "Inactif"}
-                                                </Badge>
-                                              </div>
-                                              <div className="p-4 bg-gray-50 dark:bg-gray-900/50">
-                                                <div className="grid grid-cols-4 gap-4">
-                                                  <div className="space-y-1">
-                                                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Loyer annuel</p>
-                                                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{formatPrice(sousBail.loyer || 0)}</p>
-                                                  </div>
-                                                  <div className="space-y-1">
-                                                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Surface</p>
-                                                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.surface} m²</p>
-                                                  </div>
-                                                  <div className="space-y-1">
-                                                    <div className="flex justify-between items-center">
-                                                      <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Période</p>
-                                                    </div>
-                                                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                                      {formatDate(sousBail.dateDebut)} - {formatDate(sousBail.dateFin)}
-                                                    </p>
-                                                  </div>
-                                                  {sousBail.tauxOccupation !== undefined && (
-                                                    <div className="space-y-1">
-                                                      <div className="flex justify-between items-center">
-                                                        <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Occupation</p>
-                                                        <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.tauxOccupation}%</span>
-                                                      </div>
-                                                      <Progress
-                                                        value={sousBail.tauxOccupation}
-                                                        className={cn("h-2 bg-gray-100 dark:bg-gray-700", getProgressColor(sousBail.tauxOccupation))}
-                                                      />
-                                                    </div>
-                                                  )}
-                                                </div>
-                                                {sousBail.description && (
-                                                  <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                                                    <p className="text-sm text-gray-600 dark:text-gray-300">{sousBail.description}</p>
-                                                  </div>
-                                                )}
-                                              </div>
-                                            </div>
-                                          </div>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  )}
-
                                   {/* Rest of the bail card content */}
-                                </CardContent>
-                              </Card>
+            </CardContent>
+          </Card>
                             )
                           })}
                         </div>
