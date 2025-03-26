@@ -71,6 +71,7 @@ interface Bail {
   loyer?: number
   dateDebut?: string
   dateFin?: string
+  dateDeRenouvellement?: string
   type?: string
   leaseId?: string
   title?: string
@@ -85,6 +86,7 @@ interface Bail {
     loyer: number
     dateDebut: string
     dateFin: string
+    dateDeRenouvellement?: string
     actif: boolean
     type: string
     tauxOccupation: number
@@ -208,6 +210,7 @@ interface Sublease {
   endDate?: string;
   dateDebut?: string;
   dateFin?: string;
+  dateDeRenouvellement?: string;
   status?: string;
   actif?: boolean;
   occupancyRate?: number;
@@ -1082,8 +1085,13 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                             {isNewFormat(bail)
                                               ? `${formatDate(bail.dates?.start)} - ${formatDate(bail.dates?.end)}`
                                               : `${formatDate(bail.dateDebut)} - ${formatDate(bail.dateFin)}`}
-                  </p>
-                </div>
+                                          </p>
+                                          {bail.dateDeRenouvellement && (
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                              Renouvellement: {formatDate(bail.dateDeRenouvellement)}
+                                            </p>
+                                          )}
+                                        </div>
                                         {bail.tauxOccupation !== undefined && (
                                           <div className="space-y-1">
                                             <div className="flex justify-between items-center">
@@ -1153,6 +1161,11 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                                     <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                                                       {`${formatDate(sousBail.dateDebut)} - ${formatDate(sousBail.dateFin)}`}
                                                     </p>
+                                                    {sousBail.dateDeRenouvellement && (
+                                                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                        Renouvellement: {formatDate(sousBail.dateDeRenouvellement)}
+                                                      </p>
+                                                    )}
                                                   </div>
                                                   {sousBail.tauxOccupation !== undefined && (
                                                     <div className="space-y-1">
@@ -1178,13 +1191,13 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                                 )}
                                               </div>
                                             </div>
-                                          </div>
-                                        ))}
+                </div>
+              ))}
                                       </div>
                                     </div>
                                   )}
-                                </CardContent>
-                              </Card>
+            </CardContent>
+          </Card>
                             )
                           })}
                         </div>

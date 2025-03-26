@@ -111,7 +111,7 @@ export const properties = [
         "description": "Inspection détaillée de l'état des façades",
         "priorite": "haute",
         "assigneA": "Jean Dupont",
-        "echeance": "15/03/2024",
+        "echeance": "15/03/2026",
         "statut": "En cours",
         "categorie": "Rénovation",
       },
@@ -120,7 +120,7 @@ export const properties = [
         "description": "Mise à jour des systèmes de surveillance",
         "priorite": "haute",
         "assigneA": "Marie Martin",
-        "echeance": "30/03/2024",
+        "echeance": "30/03/2028",
         "statut": "À faire",
         "categorie": "Sécurité",
       },
@@ -170,7 +170,7 @@ export const properties = [
         "surface": 350,
         "loyer": 180000,
         "dateDebut": "2021-06-01",
-        "dateFin": "2024-05-31",
+        "dateFin": "2028-05-31",
         "actif": true
       }
     ],
@@ -180,7 +180,7 @@ export const properties = [
         "responsable": "Philippe Martin",
         "budget": 650000,
         "dateDebut": "2023-04-10",
-        "dateFin": "2023-12-20",
+        "dateFin": "2025-12-20",
         "avancement": 85,
         "description": "Mise à niveau de l'infrastructure réseau et renforcement de la cybersécurité.",
         "actif": true
@@ -192,7 +192,7 @@ export const properties = [
         "description": "Évaluation de la performance énergétique du bâtiment et recommandations d'amélioration.",
         "priorite": "moyenne",
         "assigneA": "Service Technique",
-        "echeance": "2024-01-15",
+        "echeance": "2026-01-15",
         "statut": "Planifié",
         "categorie": "Développement durable"
       }
@@ -430,7 +430,7 @@ export const properties = [
         "description": "Remplacement des unités obsolètes et optimisation de la performance énergétique.",
         "priorite": "haute",
         "assigneA": "Service Technique",
-        "echeance": "2023-12-31",
+        "echeance": "2025-05-31",
         "statut": "En cours",
         "categorie": "Infrastructure"
       },
@@ -439,7 +439,7 @@ export const properties = [
         "description": "Actualisation des procédures en cas de crise majeure.",
         "priorite": "moyenne",
         "assigneA": "Direction Générale",
-        "echeance": "2024-02-28",
+        "echeance": "2025-04-28",
         "statut": "Planifié",
         "categorie": "Gestion des risques"
       }
@@ -563,7 +563,7 @@ export const properties = [
         "nom": "Restauration de la Galerie des Glaces",
         "responsable": "Isabelle Blanc",
         "budget": 0,
-        "dateDebut": "2023-01-10",
+        "dateDebut": "2024-01-10",
         "dateFin": "2027-06-30",
         "avancement": 25,
         "description": "Restauration des miroirs, dorures et peintures de la célèbre Galerie des Glaces.",
@@ -573,7 +573,7 @@ export const properties = [
         "nom": "Réhabilitation des jardins à la française",
         "responsable": "Pierre Dumont",
         "budget": 0,
-        "dateDebut": "2022-10-01",
+        "dateDebut": "2024-10-01",
         "dateFin": "2027-09-30",
         "avancement": 40,
         "description": "Restauration des parterres, bosquets et fontaines selon les plans historiques.",
@@ -586,7 +586,7 @@ export const properties = [
         "description": "Mise à niveau du système de détection et d'alarme incendie dans l'aile nord.",
         "priorite": "haute",
         "assigneA": "Service Sécurité",
-        "echeance": "2023-12-15",
+        "echeance": "2025-12-15",
         "statut": "En cours",
         "categorie": "Sécurité"
       },
@@ -595,7 +595,7 @@ export const properties = [
         "description": "Recensement et vérification de l'état des œuvres dans les réserves.",
         "priorite": "moyenne",
         "assigneA": "Conservation",
-        "echeance": "2024-03-31",
+        "echeance": "2026-03-31",
         "statut": "Planifié",
         "categorie": "Patrimoine"
       },
@@ -604,7 +604,7 @@ export const properties = [
         "description": "Analyse des aménagements nécessaires pour améliorer l'accessibilité aux personnes à mobilité réduite.",
         "priorite": "moyenne",
         "assigneA": "Service Technique",
-        "echeance": "2024-01-31",
+        "echeance": "2026-01-31",
         "statut": "Planifié",
         "categorie": "Accessibilité"
       }
@@ -657,7 +657,7 @@ export const properties = [
         "description": "Mise à niveau des caméras de surveillance et du contrôle d'accès.",
         "priorite": "haute",
         "assigneA": "Service Sécurité",
-        "echeance": "2024-09-30",
+        "echeance": "2025-09-30",
         "statut": "En cours",
         "categorie": "Sécurité"
       }
@@ -720,7 +720,7 @@ export const properties = [
         "description": "Évaluation de l'état des serveurs et du réseau interne.",
         "priorite": "moyenne",
         "assigneA": "Départment IT",
-        "echeance": "2024-07-15",
+        "echeance": "2025-07-15",
         "statut": "Planifié",
         "categorie": "Infrastructure"
       }
