@@ -1139,6 +1139,10 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                                         <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{formatPrice(sousBail.loyer || 0)}</p>
                                                       </div>
                                                       <div className="space-y-1">
+                                                        <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Surface</p>
+                                                        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.surface} m²</p>
+                                                      </div>
+                                                      <div className="space-y-1">
                                                         <div className="flex justify-between items-center">
                                                           <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Période</p>
                                                           {sousBail.occupationActuelle !== undefined && sousBail.capaciteMax !== undefined && (
@@ -1153,20 +1157,21 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                                       </div>
                                                       {sousBail.tauxOccupation !== undefined && (
                                                         <div className="space-y-1">
-                                                          <div className="flex justify-between items-center">
-                                                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Occupation</p>
-                                                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.tauxOccupation}%</span>
-                                                          </div>
-                                                          <Progress
-                                                            value={sousBail.tauxOccupation}
-                                                            className={cn("h-2 bg-gray-100 dark:bg-gray-700", getProgressColor(sousBail.tauxOccupation))}
-                                                          />
+                                                          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Occupation</p>
+                                                          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.tauxOccupation}%</p>
                                                         </div>
                                                       )}
                                                     </div>
                                                   </div>
                                                   <div className="p-4 border-t border-gray-100 dark:border-gray-800">
                                                     <div className="space-y-4">
+                                                      <div>
+                                                        <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+                                                          <User className="h-4 w-4 mr-2 text-gray-500" />
+                                                          Occupant
+                                                        </h5>
+                                                        <p className="text-sm text-gray-900 dark:text-gray-100">{sousBail.locataire}</p>
+                                                      </div>
                                                       <div>
                                                         <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
                                                           <Layers className="h-4 w-4 mr-2 text-gray-500" />
