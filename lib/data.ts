@@ -8,111 +8,122 @@ export const properties = [
     "region": "Île-de-France",
     "valeur": 5000000,
     "superficie": 11000,
-    "type": "Administratif",
+    "type": "Palais présidentiel",
     "status": "actif",
-    "ministere": "Présidence",
+    "ministere": "Présidence de la République",
     "niveauSecurite": "élevé",
-    "telephone": "01 42 92 81 00",
-    "tauxOccupation": 85,
-    "occupationActuelle": 850,
-    "capaciteMax": 1000,
+    "telephone": "+33 1 42 92 81 00",
+    "tauxOccupation": 95,
+    "occupationActuelle": 285,
+    "capaciteMax": 300,
     "latitude": 48.8704,
-    "longitude": 2.3167,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Secretary_Pompeo_Arrives_to_Meet_with_French_Foreign_Minister_Le_Drian_in_Paris_%2850610423656%29_%28cropped%29.jpg/2880px-Secretary_Pompeo_Arrives_to_Meet_with_French_Foreign_Minister_Le_Drian_in_Paris_%2850610423656%29_%28cropped%29.jpg",
-    "description": "Résidence officielle du Président de la République française. Ce palais historique abrite les bureaux présidentiels et accueille les réceptions d'État.",
+    "longitude": 2.3165,
+    "image": "/palais-elysee.jpg",
+    "description": "Résidence officielle du président de la République française, le Palais de l'Élysée est un monument historique majeur de Paris.",
     "installations": [
       "Salle de réception",
       "Bureaux présidentiels",
+      "Bureaux administratifs",
       "Jardins",
       "Héliport",
       "Salle de conférence",
-      "Centre de communication sécurisé"
+      "Centre de communication sécurisé",
+      "Salle du Conseil",
+      "Centre de presse",
+      "Salles de réunion",
+      "Centre de conférences",
+      "Restaurant administratif",
+      "Bibliothèque",
+      "Centre de documentation",
+      "Parking souterrain",
+      "Amphithéâtres",
+      "Cafétéria",
+      "Espaces étudiants",
+      "Galeries d'exposition",
+      "Fontaines",
+      "Boutiques",
+      "Restaurants",
+      "WiFi haute performance",
     ],
     "bails": [
       {
-        "leaseId": "FR-GOV-RE-PRESIDENCE",
-        "title": "FR-GOV-RE-PRESIDENCE-60 mois Le Palais de l'Élysée Lease",
-        "status": "Propriété Gouvernementale",
-        "general": {
-          "leaseDetails": {
-            "type": "Bail présidentiel",
-            "primaryUse": "Résidence présidentielle",
-            "baseYear": "2022"
+        "actif": true,
+        "reference": "BAIL-2024-001",
+        "locataire": "Présidence de la République",
+        "surface": 11000,
+        "loyer": 0,
+        "dateDebut": "01/01/2024",
+        "dateFin": "31/12/2027",
+        "type": "Bail administratif",
+        "tauxOccupation": 95,
+        "occupationActuelle": 285,
+        "capaciteMax": 300,
+        "sous_bails": [
+          {
+            "reference": "SOUS-2024-001",
+            "locataire": "DGFiP - Direction Generale des Finances Publiques",
+            "surface": 5000,
+            "loyer": 0,
+            "dateDebut": "01/01/2024",
+            "dateFin": "31/12/2027",
+            "actif": true,
+            "type": "Bail interne",
+            "tauxOccupation": 90,
+            "occupationActuelle": 150,
+            "capaciteMax": 165,
+            "description": "Direction des Grandes Entreprises",
+            "installations": [
+              "Bureaux administratifs",
+              "Salles de réunion",
+              "Centre de documentation",
+              "Parking souterrain",
+              "WiFi haute performance",
+            ],
           },
-          "financialDetails": {
-            "rent": "0,00 € EUR",
-            "accountingType": "Budget de l'État",
-            "paymentTerms": "Alloué annuellement"
-          }
-        },
-        "dates": {
-          "start": "14/05/2022",
-          "duration": "60 mois",
-          "end": "14/05/2027"
-        },
-        "parties": {
-          "tenant": {
-            "organization": "République Française\\Présidence",
-            "legalName": "Président de la République Française",
-            "id": "FR-PRES-001",
-            "location": "55 Rue du Faubourg Saint-Honoré, 75008 Paris"
-          }
-        },
-        "terms": {
-          "securityRequirements": [
-            "Sécurité présidentielle",
-            "Garde Républicaine",
-            "Conservation du patrimoine",
-            "Entretien des jardins",
-            "Protection des œuvres d'art"
-          ]
-        },
-        "metadata": {
-          "lastUpdated": "10/05/2022"
-        }
-      }
+        ],
+      },
     ],
     "projets": [
       {
-        "nom": "Rénovation des systèmes de sécurité",
+        "nom": "Rénovation des façades",
         "responsable": "Jean Dupont",
-        "budget": 1200000,
-        "dateDebut": "2023-06-15",
-        "dateFin": "2024-03-30",
-        "avancement": 65,
-        "description": "Mise à niveau des systèmes de surveillance et de contrôle d'accès dans l'ensemble du palais.",
-        "actif": true
+        "budget": 0,
+        "dateDebut": "01/01/2024",
+        "dateFin": "31/12/2027",
+        "avancement": 35,
+        "description": "Rénovation complète des façades du palais",
+        "actif": true,
       },
       {
-        "nom": "Restauration des façades",
-        "responsable": "Marie Laurent",
-        "budget": 800000,
-        "dateDebut": "2022-09-10",
-        "dateFin": "2023-07-15",
-        "avancement": 100,
-        "description": "Restauration des façades historiques et nettoyage des pierres.",
-        "actif": false
-      }
+        "nom": "Modernisation des systèmes de sécurité",
+        "responsable": "Marie Martin",
+        "budget": 0,
+        "dateDebut": "01/01/2024",
+        "dateFin": "31/12/2027",
+        "avancement": 45,
+        "description": "Mise à niveau des systèmes de sécurité",
+        "actif": true,
+      },
     ],
     "taches": [
       {
-        "titre": "Inspection des systèmes électriques",
-        "description": "Vérification complète des installations électriques de l'aile ouest.",
-        "priorite": "moyenne",
-        "assigneA": "Service Technique",
-        "echeance": "2023-12-15",
+        "titre": "Inspection des façades",
+        "description": "Inspection détaillée de l'état des façades",
+        "priorite": "haute",
+        "assigneA": "Jean Dupont",
+        "echeance": "15/03/2024",
         "statut": "En cours",
-        "categorie": "Maintenance"
+        "categorie": "Rénovation",
       },
       {
-        "titre": "Mise à jour du plan d'évacuation",
-        "description": "Actualisation des procédures d'évacuation et formation du personnel.",
+        "titre": "Mise à jour des systèmes de sécurité",
+        "description": "Mise à jour des systèmes de surveillance",
         "priorite": "haute",
-        "assigneA": "Service Sécurité",
-        "echeance": "2023-11-30",
-        "statut": "Planifié",
-        "categorie": "Sécurité"
-      }
+        "assigneA": "Marie Martin",
+        "echeance": "30/03/2024",
+        "statut": "À faire",
+        "categorie": "Sécurité",
+      },
     ]
   },
   {
@@ -256,48 +267,80 @@ export const properties = [
           ]
         },
         "metadata": {
-          "lastUpdated": "15/12/2022"
+          "lastUpdated": "15/03/2025"
         },
         "sous_bails": [
           {
-            "reference": "BERCY_2E4",
-            "locataire": "DGFiP - Direction Generale des Finances Publiques",
-            "surface": 3000,
+            "reference": "DB_1",
+            "locataire": "Direction du Budget (DB)",
+            "surface": 1000,
             "loyer": 0,
-            "dateDebut": "01/01/2023",
+            "dateDebut": "01/01/2022",
             "dateFin": "31/12/2027",
             "actif": true,
             "type": "Bail Interne",
-            "tauxOccupation": 95,
-            "occupationActuelle": 285,
-            "capaciteMax": 300,
-            "description": "Direction en charge du contrôle fiscal des grandes entreprises",
-            "installations": [
-              "Bureaux administratifs",
-              "Salle de réunion",
-              "Archives",
-              "Parking dédié"
-            ]
+            "tauxOccupation": 85,
+            "dateDeRenouvellement": "31/06/2026"
           },
           {
-            "reference": "BERCY_2E5",
-            "locataire": "DGFiP - Direction Generale des Finances Publiques",
-            "surface": 2000,
+            "reference": "DGFiP_1",
+            "locataire": "Direction generale des Finances Publiques (DGFiP)",
+            "surface": 2500,
             "loyer": 0,
-            "dateDebut": "01/01/2023",
+            "dateDebut": "01/01/2022",
             "dateFin": "31/12/2027",
             "actif": true,
             "type": "Bail Interne",
-            "tauxOccupation": 90,
-            "occupationActuelle": 180,
-            "capaciteMax": 200,
-            "description": "Service en charge des finances publiques",
-            "installations": [
-              "Bureaux administratifs",
-              "Centre de traitement",
-              "Salle d'archives",
-              "Zone de repos"
-            ]
+            "tauxOccupation": 85,
+            "dateDeRenouvellement": "31/06/2026"
+          },
+          {
+            "reference": "DGT_1",
+            "locataire": "Direction generale du Trésor (DGT)",
+            "surface": 1200,
+            "loyer": 0,
+            "dateDebut": "01/01/2022",
+            "dateFin": "31/12/2027",
+            "actif": true,
+            "type": "Bail Interne",
+            "tauxOccupation": 85,
+            "dateDeRenouvellement": "31/06/2026"
+          },
+          {
+            "reference": "Insee_1",
+            "locataire": "Institut National de la statistique et des études Economiques (Insee)",
+            "surface": 2000,
+            "loyer": 0,
+            "dateDebut": "01/01/2022",
+            "dateFin": "31/12/2027",
+            "actif": true,
+            "type": "Bail Interne",
+            "tauxOccupation": 85,
+            "dateDeRenouvellement": "31/06/2026"
+          },
+          {
+            "reference": "IGF_1",
+            "locataire": "Inspection generale des finances (IGF)",
+            "surface": 4000,
+            "loyer": 0,
+            "dateDebut": "01/01/2022",
+            "dateFin": "31/12/2027",
+            "actif": true,
+            "type": "Bail Interne",
+            "tauxOccupation": 85,
+            "dateDeRenouvellement": "31/06/2026"
+          },
+          {
+            "reference": "DGCCRF_1",
+            "locataire": "Direction generale de la concurrence, de la consommation et de la repression des fraudes (DGCCRF)",
+            "surface": 4400,
+            "loyer": 0,
+            "dateDebut": "01/01/2022",
+            "dateFin": "31/12/2027",
+            "actif": true,
+            "type": "Bail Interne",
+            "tauxOccupation": 85,
+            "dateDeRenouvellement": "31/06/2026"
           }
         ]
       },
@@ -352,15 +395,7 @@ export const properties = [
             "actif": true,
             "type": "Bail Interne",
             "tauxOccupation": 85,
-            "occupationActuelle": 170,
-            "capaciteMax": 200,
-            "description": "Service en charge des relations financières internationales",
-            "installations": [
-              "Bureaux diplomatiques",
-              "Salle de conférence",
-              "Centre de documentation",
-              "Zone de réception"
-            ]
+            "dateDeRenouvellement": "31/06/2026"
           },
           {
             "reference": "BERCY_3E2",
@@ -372,15 +407,7 @@ export const properties = [
             "actif": true,
             "type": "Bail Interne",
             "tauxOccupation": 88,
-            "occupationActuelle": 132,
-            "capaciteMax": 150,
-            "description": "Service en charge de l'analyse macroéconomique",
-            "installations": [
-              "Bureaux d'étude",
-              "Salle d'analyse",
-              "Centre de données",
-              "Espace de travail collaboratif"
-            ]
+            "dateDeRenouvellement": "31/06/2026"
           }
         ]
       }
@@ -814,73 +841,67 @@ export interface Project {
 
 export const palaceProject: Project = {
   general_information: {
-    project_id: "1000586",
-    project_name: "PAE001 - Palace Renovation Project",
-    location: "Le Palais de l'Elysée, Paris",
+    project_id: "PRJ-2024-001",
+    project_name: "Rénovation du Palais de l'Élysée",
+    location: "55 Rue du Faubourg Saint-Honoré, 75008 Paris",
     status: "En cours",
-    date: "02/10/2019",
-    project_type: "Heritage",
-    currency: "Euros",
-    classification: "Renovation",
-    project_phase: "Construction",
-    planned_start_date: "06/11/2020",
-    planned_end_date: "08/01/2027"
+    date: "01/01/2024",
+    project_type: "Rénovation majeure",
+    currency: "EUR",
+    classification: "Projet présidentiel",
+    project_phase: "Phase 2",
+    planned_start_date: "01/01/2024",
+    planned_end_date: "31/12/2027"
+  },
+  budget_information: {
+    original_budget: "0,00 € EUR",
+    budget_changes: "0,00 € EUR",
+    budget_current: "0,00 € EUR",
+    original_commitment: "0,00 € EUR",
+    change_orders: "0,00 € EUR",
+    current_commitment: "0,00 € EUR",
+    paid: "0,00 € EUR",
+    forecast_to_complete: "0,00 € EUR",
+    forecast_final: "0,00 € EUR"
+  },
+  funding_source: {
+    name: "Budget de l'État",
+    fiscal_year: "2024",
+    project_name: "Le Palais de l'Elysée",
+    committed_to_project: "0,00 € EUR"
+  },
+  tasks: {
+    total_count: 4,
+    status: "En cours",
+    completion_percentage: 35,
+    key_tasks: [
+      "Rénovation des façades",
+      "Mise aux normes des installations électriques",
+      "Modernisation des systèmes de sécurité",
+      "Rénovation des jardins"
+    ],
+    task_date_range: "01/01/2024 - 31/12/2027"
   },
   key_contacts: [
     {
-      role: "Gestionnaire de projet",
-      name: "Maxime Durand",
-      phone: "(33) 01-55-55-6666",
-      email: "mdurand@ElyseeRenovation.fr"
+      name: "Jean Dupont",
+      role: "Chef de projet",
+      phone: "+33 1 23 45 67 89",
+      email: "jean.dupont@elysee.fr"
     },
     {
-      role: "Architecte",
-      name: "Antoine Leclerc",
-      phone: "(33) 01-88-34-9090",
-      email: "aleclerc@ElyseeRenovation.fr"
+      name: "Marie Martin",
+      role: "Architecte en chef",
+      phone: "+33 1 98 76 54 32",
+      email: "marie.martin@elysee.fr"
     },
     {
-      role: "Vendeur",
-      name: "Bernard Rochette",
-      phone: "(33) 01-87-33-8088",
-      email: "brochette@ElyseeRenovation.fr"
-    },
-    {
-      role: "Vendeur",
-      name: "Jacques Martel",
-      phone: "(33) 01-88-34-9133",
-      email: "jmartel@ElyseeRenovation.fr"
+      name: "Pierre Durand",
+      role: "Responsable sécurité",
+      phone: "+33 1 45 67 89 01",
+      email: "pierre.durand@elysee.fr"
     }
   ],
-  budget_information: {
-    original_budget: "€1,554,285.47",
-    budget_changes: "€8,510.00",
-    budget_current: "€1,562,795.47",
-    original_commitment: "€1,260,343.00",
-    change_orders: "€5,400.00",
-    current_commitment: "€1,265,743.00",
-    paid: "€172,809.57",
-    forecast_to_complete: "€240,415.18",
-    forecast_final: "€1,506,158.18"
-  },
-  funding_source: {
-    name: "Fonds d'investissement pour le patrimoine",
-    fiscal_year: "2010",
-    project_name: "Le Palais de l'Elysée",
-    committed_to_project: "€1,554,285.47"
-  },
-  tasks: {
-    total_count: 36,
-    status: "En cours",
-    completion_percentage: 88,
-    key_tasks: [
-      "Initiation du projet",
-      "Pré-design",
-      "Évaluation du patrimoine",
-      "Phase de design"
-    ],
-    task_date_range: "06/11/2020 to 08/01/2027"
-  },
   procurement: {
     proposals_count: 8,
     key_proposals: [

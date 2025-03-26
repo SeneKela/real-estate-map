@@ -206,30 +206,36 @@ const formatDate = (dateString: string | undefined | null): string => {
   }
 
   try {
-    // Sinon on utilise le format standard
     const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" }
     const date = new Date(dateString)
     if (isNaN(date.getTime())) {
-      return dateString // Return original string if date is invalid
+      return "Date invalide"
     }
     return date.toLocaleDateString("fr-FR", options)
   } catch (error) {
-    return dateString // Return original string if parsing fails
+    console.error("Error formatting date:", error)
+    return "Date invalide"
   }
 }
 
-const formatPrice = (price: number | string): string => {
+const formatPrice = (price: number | string | undefined | null): string => {
+  if (!price) return "Non spécifié"
+  
   // Si c'est déjà une chaîne formatée avec devise
   if (typeof price === "string" && price.includes("€")) {
     return price
   }
 
-  // Sinon on formate le nombre
-  return new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "EUR",
-    maximumFractionDigits: 0,
-  }).format(Number(price))
+  try {
+    return new Intl.NumberFormat("fr-FR", {
+      style: "currency",
+      currency: "EUR",
+      maximumFractionDigits: 0,
+    }).format(Number(price))
+  } catch (error) {
+    console.error("Error formatting price:", error)
+    return "Montant invalide"
+  }
 }
 
 const getStatusBadgeConfig = (status: Property["status"] | "Propriété Gouvernementale" | "actif" | "inactif"): StatusBadgeConfig => {
@@ -369,6 +375,34 @@ const getRelatedProjectDetails = (propertyId: number): Project | null => {
   return null
 }
 
+// Fix type checking for bail properties
+const isNewFormat = (bail: Bail): boolean => {
+  return 'leaseId' in bail && bail.leaseId !== undefined
+}
+
+const getBailTitle = (bail: Bail): string => {
+  if (isNewFormat(bail)) {
+    return bail.title || `Bail ${bail.leaseId}`
+  }
+  return `Bail ${bail.reference}`
+}
+
+const getBailStatus = (bail: Bail): "actif" | "inactif" | "Propriété Gouvernementale" => {
+  if (isNewFormat(bail)) {
+    return bail.status || "inactif"
+  }
+  return bail.actif ? "actif" : "inactif"
+}
+
+const getBailTenant = (bail: Bail): string => {
+  if (isNewFormat(bail)) {
+    return bail.parties?.tenant?.organization || 
+           bail.parties?.tenant?.legalName || 
+           "Non spécifié"
+  }
+  return bail.locataire || "Non spécifié"
+}
+
 export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
   const [mounted, setMounted] = useState(false)
   const [activeTab, setActiveTab] = useState("details")
@@ -401,7 +435,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
     return () => {
       contentRef.current?.removeEventListener('scroll', handleScroll)
     }
-  }, [mounted])
+  }, [mounted, setIsHeaderMinimized])
 
   // Handle escape key to close modal
   useEffect(() => {
@@ -581,11 +615,11 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                 <div className="p-4 flex flex-col items-center justify-center">
                   <div className="flex items-center justify-center h-10 w-10 rounded-full bg-blue-50 text-blue-600 mb-2">
                     <Maximize className="h-5 w-5" />
-                  </div>
+              </div>
                   <div className="text-center">
                     <p className="text-sm text-gray-500 dark:text-gray-400">Superficie</p>
                     <p className="text-lg font-semibold">{property.superficie.toLocaleString()} m²</p>
-                  </div>
+              </div>
                 </div>
 
                 <div className="p-4 flex flex-col items-center justify-center">
@@ -907,12 +941,8 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                       {property.bails?.length > 0 ? (
                         <div className="space-y-6">
                           {property.bails.map((bail, index) => {
-                            // Déterminer si c'est un bail au nouveau format ou à l'ancien format
-                            const isNewFormat = bail.leaseId !== undefined
-                            const bailTitle = isNewFormat ? bail.title : `Bail ${bail.reference}`
-                            const bailStatus = isNewFormat 
-                              ? (bail.status === "actif" ? "actif" : "inactif")
-                              : (bail.actif ? "actif" : "inactif")
+                            const bailTitle = getBailTitle(bail)
+                            const bailStatus = getBailStatus(bail)
                             const statusConfig = getStatusBadgeConfig(bailStatus)
 
                             return (
@@ -926,10 +956,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                       <div>
                                         <h3 className="text-base font-medium">{bailTitle}</h3>
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                                          Occupant:{" "}
-                                          {isNewFormat
-                                            ? bail.parties?.tenant?.organization || bail.parties?.tenant?.legalName
-                                            : bail.locataire}
+                                          Occupant: {getBailTenant(bail)}
                                         </p>
                                       </div>
                                     </div>
@@ -940,337 +967,124 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                   </div>
                                 </CardHeader>
 
-                                {isNewFormat ? (
-                                  // Affichage pour le nouveau format de bail
-                                  <>
-                                    <CardContent className="p-4 space-y-6">
-                                      {/* Détails du bail */}
-                                      {bail.general?.leaseDetails && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-                                            <FileCheck className="h-4 w-4 mr-2 text-gray-500" />
-                                            Détails du bail
-                                          </h4>
-                                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                            <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Type</p>
-                                              <p className="text-sm font-medium">
-                                                {bail.general.leaseDetails.type || "Non spécifié"}
-                                              </p>
-                                            </div>
-                                            <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                Usage principal
-                                              </p>
-                                              <p className="text-sm font-medium">
-                                                {bail.general.leaseDetails.primaryUse || "Non spécifié"}
-                                              </p>
-                                            </div>
-                                            <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                Année de référence
-                                              </p>
-                                              <p className="text-sm font-medium">
-                                                {bail.general.leaseDetails.baseYear || "Non spécifié"}
-                                              </p>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      )}
-
-                                      {/* Détails financiers */}
-                                      {bail.general?.financialDetails && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-                                            <Banknote className="h-4 w-4 mr-2 text-gray-500" />
-                                            Détails financiers
-                                          </h4>
-                                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                            <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Loyer</p>
-                                              <p className="text-sm font-medium">
-                                                {bail.general.financialDetails.rent || "Non spécifié"}
-                                              </p>
-                                            </div>
-                                            <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                Type de comptabilité
-                                              </p>
-                                              <p className="text-sm font-medium">
-                                                {bail.general.financialDetails.accountingType || "Non spécifié"}
-                                              </p>
-                                            </div>
-                                            <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                Conditions de paiement
-                                              </p>
-                                              <p className="text-sm font-medium">
-                                                {bail.general.financialDetails.paymentTerms || "Non spécifié"}
-                                              </p>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      )}
-
-                                      {/* Dates */}
-                                      {bail.dates && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-                                            <CalendarDays className="h-4 w-4 mr-2 text-gray-500" />
-                                            Période du bail
-                                          </h4>
-                                          <div className="p-4 bg-gray-50 dark:bg-gray-900/50">
-                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                              <div className="space-y-1">
-                                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Loyer annuel</p>
-                                                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                                  {bail.general?.financialDetails?.rent || formatPrice(bail.loyer || 0)}
-                                                </p>
-                                              </div>
-                                              <div className="space-y-1">
-                                                <div className="flex justify-between items-center">
-                                                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Période</p>
-                                                </div>
-                                                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                                  {formatDate(bail.dates.start)} - {formatDate(bail.dates.end)}
-                                                </p>
-                                              </div>
-                                              {bail.tauxOccupation !== undefined && (
-                                                <div className="space-y-1">
-                                                  <div className="flex justify-between items-center">
-                                                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Occupation</p>
-                                                    <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{bail.tauxOccupation}%</span>
-                                                  </div>
-                                                  <Progress
-                                                    value={bail.tauxOccupation}
-                                                    className={cn("h-2 bg-gray-100 dark:bg-gray-700", getProgressColor(bail.tauxOccupation))}
-                                                  />
-                                                </div>
-                                              )}
-                                            </div>
-                                          </div>
-                                        </div>
-                                      )}
-
-                                      {/* Informations sur le locataire */}
-                                      {bail.parties?.tenant && (
-                                        <div>
-                                          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-                                            <SquareUser className="h-4 w-4 mr-2 text-gray-500" />
-                                            Informations sur le locataire
-                                          </h4>
-                                          <div className="space-y-3">
-                                            <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-800">
-                                              <div className="flex items-center gap-2">
-                                                <Building2 className="h-4 w-4 text-gray-500" />
-                                                <span className="text-sm text-gray-600 dark:text-gray-400">
-                                                  Organisation
-                                                </span>
-                                              </div>
-                                              <span className="text-sm font-medium">
-                                                {bail.parties.tenant.organization || "Non spécifié"}
-                                              </span>
-                                            </div>
-                                            <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-800">
-                                              <div className="flex items-center gap-2">
-                                                <User className="h-4 w-4 text-gray-500" />
-                                                <span className="text-sm text-gray-600 dark:text-gray-400">
-                                                  Nom légal
-                                                </span>
-                                              </div>
-                                              <span className="text-sm font-medium">
-                                                {bail.parties.tenant.legalName || "Non spécifié"}
-                                              </span>
-                                            </div>
-                                            <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-800">
-                                              <div className="flex items-center gap-2">
-                                                <Hash className="h-4 w-4 text-gray-500" />
-                                                <span className="text-sm text-gray-600 dark:text-gray-400">
-                                                  Identifiant
-                                                </span>
-                                              </div>
-                                              <span className="text-sm font-medium">
-                                                {bail.parties.tenant.id || "Non spécifié"}
-                                              </span>
-                                            </div>
-                                            <div className="flex items-center justify-between py-2">
-                                              <div className="flex items-center gap-2">
-                                                <MapPin className="h-4 w-4 text-gray-500" />
-                                                <span className="text-sm text-gray-600 dark:text-gray-400">
-                                                  Emplacement
-                                                </span>
-                                              </div>
-                                              <span className="text-sm font-medium">
-                                                {bail.parties.tenant.location || "Non spécifié"}
-                                              </span>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      )}
-
-                                      {/* Exigences de sécurité */}
-                                      {bail.terms?.securityRequirements &&
-                                        bail.terms.securityRequirements.length > 0 && (
-                                          <div>
-                                            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-                                              <ShieldCheck className="h-4 w-4 mr-2 text-gray-500" />
-                                              Exigences de sécurité
-                                            </h4>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                                              {bail.terms.securityRequirements.map((req, idx) => (
-                                                <div
-                                                  key={idx}
-                                                  className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg flex items-center gap-2"
-                                                >
-                                                  <BadgeCheck className="h-4 w-4 text-blue-500" />
-                                                  <span className="text-sm">{req}</span>
-                </div>
-              ))}
-                                            </div>
-                                          </div>
-                                        )}
-            </CardContent>
-                                    {/* Add sub-leases section */}
-                                    {bail.sous_bails && bail.sous_bails.length > 0 && (
-                                      <div className="border-t border-gray-200 dark:border-gray-800">
-                                        <div className="p-6">
-                                          <h4 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center">
-                                            <FileText className="h-5 w-5 mr-2 text-gray-500" />
-                                            Baux Internes
-                                          </h4>
-                                          <div className="space-y-4">
-                                            {bail.sous_bails.map((sousBail, idx) => (
-                                              <div key={idx} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden">
-                                                <div className="p-4 border-b border-gray-100 dark:border-gray-800">
-                                                  <div className="flex items-center justify-between mb-3">
-                                                    <div className="flex items-center gap-3">
-                                                      <Badge variant="default" className="bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300">
-                                                        {sousBail.type}
-                                                      </Badge>
-                                                      <div>
-                                                        <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
-                                                          <User className="h-4 w-4 mr-2 text-gray-500" />
-                                                          Occupant
-                                                        </h5>
-                                                        <p className="text-sm text-gray-900 dark:text-gray-100">{sousBail.locataire}</p>
-                                                      </div>
-                                                    </div>
-                                                    <Badge variant="default" className={sousBail.actif ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300" : "bg-gray-50 text-gray-700 dark:bg-gray-900/20 dark:text-gray-300"}>
-                                                      {sousBail.actif ? "Actif" : "Inactif"}
-                                                    </Badge>
-                                                  </div>
-                                                  <div className="p-4 bg-gray-50 dark:bg-gray-900/50">
-                                                    <div className="grid grid-cols-4 gap-4">
-                                                      <div className="space-y-1">
-                                                        <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Loyer annuel</p>
-                                                        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{formatPrice(sousBail.loyer || 0)}</p>
-                                                      </div>
-                                                      <div className="space-y-1">
-                                                        <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Surface</p>
-                                                        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.surface} m²</p>
-                                                      </div>
-                                                      <div className="space-y-1">
-                                                        <div className="flex justify-between items-center">
-                                                          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Période</p>
-                                                        </div>
-                                                        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                                          {formatDate(sousBail.dateDebut)} - {formatDate(sousBail.dateFin)}
-                                                        </p>
-                                                      </div>
-                                                      {sousBail.tauxOccupation !== undefined && (
-                                                        <div className="space-y-1">
-                                                          <div className="flex justify-between items-center">
-                                                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Occupation</p>
-                                                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{sousBail.tauxOccupation}%</span>
-                                                          </div>
-                                                          <Progress
-                                                            value={sousBail.tauxOccupation}
-                                                            className={cn("h-2 bg-gray-100 dark:bg-gray-700", getProgressColor(sousBail.tauxOccupation))}
-                                                          />
-                                                        </div>
-                                                      )}
-                                                    </div>
-                                                  </div>
-                                                  <div className="p-4 border-t border-gray-100 dark:border-gray-800">
-                                                    <div className="space-y-4">
-                                                      <div>
-                                                        <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
-                                                          <Layers className="h-4 w-4 mr-2 text-gray-500" />
-                                                          Installations
-                                                        </h5>
-                                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                                                          {sousBail.installations.map((installation, index) => {
-                                                            const Icon = getInstallationIcon(installation)
-                                                            return (
-                                                              <div
-                                                                key={index}
-                                                                className="flex items-center p-2 rounded-md bg-white dark:bg-gray-800"
-                                                              >
-                                                                <div className="h-6 w-6 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mr-2">
-                                                                  <Icon className="h-3.5 w-3.5 text-gray-600 dark:text-gray-400" />
-                                                                </div>
-                                                                <span className="text-xs">{installation}</span>
-                                                              </div>
-                                                            )
-                                                          })}
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    )}
-                                    <CardFooter className="bg-gray-50 dark:bg-gray-900 p-4 border-t border-gray-200 dark:border-gray-800 flex justify-end">
-                                      <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2">
-                                        <Clock className="h-4 w-4" />
-                                        Dernière mise à jour: {bail.metadata?.lastUpdated || "Non spécifié"}
-                                      </div>
-                                      <div className="flex space-x-2">
-                                        <Button variant="default" size="sm" className="text-xs flex items-center gap-1">
-                                          <Pencil className="h-3.5 w-3.5" />
-                                          Modifier
-                                        </Button>
-                                        <Button variant="outline" size="sm" className="text-xs flex items-center gap-1">
-                                          <Printer className="h-3.5 w-3.5" />
-                                          Imprimer
-                                        </Button>
-                                      </div>
-                                    </CardFooter>
-                                  </>
-                                ) : (
-                                  // Affichage pour l'ancien format de bail
-                                  <>
-                                    <CardContent className="p-4">
+                                {/* Rest of the bail card content */}
+                                <CardContent className="p-4 space-y-6">
+                                  {/* Détails du bail */}
+                                  {isNewFormat(bail) && bail.general?.leaseDetails && (
+                                    <div>
+                                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                                        <FileCheck className="h-4 w-4 mr-2 text-gray-500" />
+                                        Détails du bail
+                                      </h4>
                                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Surface</p>
-                                          <p className="text-sm font-medium">{bail.surface} m²</p>
-                                        </div>
-                                        <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Loyer annuel</p>
-                                          <p className="text-sm font-medium">{formatPrice(bail.loyer || 0)}</p>
-                                        </div>
-                                        <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
-                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Période</p>
+                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Type</p>
                                           <p className="text-sm font-medium">
-                                            {formatDate(bail.dateDebut)} - {formatDate(bail.dateFin)}
+                                            {bail.general.leaseDetails.type || "Non spécifié"}
+                                          </p>
+                                        </div>
+                                        <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
+                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                            Usage principal
+                                          </p>
+                                          <p className="text-sm font-medium">
+                                            {bail.general.leaseDetails.primaryUse || "Non spécifié"}
+                                          </p>
+                                        </div>
+                                        <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
+                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                            Année de référence
+                                          </p>
+                                          <p className="text-sm font-medium">
+                                            {bail.general.leaseDetails.baseYear || "Non spécifié"}
                                           </p>
                                         </div>
                                       </div>
-            </CardContent>
-                                    <CardFooter className="bg-gray-50 dark:bg-gray-900 p-4 border-t border-gray-200 dark:border-gray-800 flex justify-end">
-                                      <Button variant="outline" size="sm" className="text-xs flex items-center gap-1">
-                                        <ExternalLink className="h-3.5 w-3.5" />
-                                        Voir les détails
-                                      </Button>
-                                    </CardFooter>
-                                  </>
-                                )}
-          </Card>
+                                    </div>
+                                  )}
+
+                                  {/* Détails financiers */}
+                                  {isNewFormat(bail) && bail.general?.financialDetails && (
+                                    <div>
+                                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                                        <Banknote className="h-4 w-4 mr-2 text-gray-500" />
+                                        Détails financiers
+                                      </h4>
+                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
+                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Loyer</p>
+                                          <p className="text-sm font-medium">
+                                            {bail.general.financialDetails.rent || "Non spécifié"}
+                                          </p>
+                                        </div>
+                                        <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
+                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                            Type de comptabilité
+                                          </p>
+                                          <p className="text-sm font-medium">
+                                            {bail.general.financialDetails.accountingType || "Non spécifié"}
+                                          </p>
+                                        </div>
+                                        <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-lg">
+                                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                            Conditions de paiement
+                                          </p>
+                                          <p className="text-sm font-medium">
+                                            {bail.general.financialDetails.paymentTerms || "Non spécifié"}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Période du bail */}
+                                  <div>
+                                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                                      <CalendarDays className="h-4 w-4 mr-2 text-gray-500" />
+                                      Période du bail
+                                    </h4>
+                                    <div className="p-4 bg-gray-50 dark:bg-gray-900/50">
+                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div className="space-y-1">
+                                          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Loyer annuel</p>
+                                          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                            {isNewFormat(bail) 
+                                              ? (bail.general?.financialDetails?.rent || "Non spécifié")
+                                              : formatPrice(bail.loyer)}
+                                          </p>
+                                        </div>
+                                        <div className="space-y-1">
+                                          <div className="flex justify-between items-center">
+                                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Période</p>
+                                            {bail.tauxOccupation !== undefined && (
+                                              <span className="text-xs text-gray-500 dark:text-gray-400">{bail.tauxOccupation}%</span>
+                                            )}
+                                          </div>
+                                          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                            {isNewFormat(bail)
+                                              ? `${formatDate(bail.dates?.start)} - ${formatDate(bail.dates?.end)}`
+                                              : `${formatDate(bail.dateDebut)} - ${formatDate(bail.dateFin)}`}
+                                          </p>
+                                        </div>
+                                        {bail.tauxOccupation !== undefined && (
+                                          <div className="space-y-1">
+                                            <div className="flex justify-between items-center">
+                                              <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Occupation</p>
+                                              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{bail.tauxOccupation}%</span>
+                                            </div>
+                                            <Progress
+                                              value={bail.tauxOccupation}
+                                              className={cn("h-2 bg-gray-100 dark:bg-gray-700", getProgressColor(bail.tauxOccupation))}
+                                            />
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Rest of the bail card content */}
+                                </CardContent>
+                              </Card>
                             )
                           })}
                         </div>
