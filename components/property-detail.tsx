@@ -111,6 +111,7 @@ interface Bail {
     start?: string
     duration?: string
     end?: string
+    expirationReminder?: string
   }
   parties?: {
     tenant?: {
@@ -1107,6 +1108,34 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                           </div>
                                         )}
                                       </div>
+
+                                      {/* Dates Critiques */}
+                                      {isNewFormat(bail) && bail.dates && (
+                                        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                          <h5 className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                                            <AlertCircle className="h-3.5 w-3.5 mr-1.5 text-gray-500" />
+                                            Dates Critiques
+                                          </h5>
+                                          <div className="grid grid-cols-2 gap-3">
+                                            <div className="bg-white dark:bg-gray-800 p-2 rounded-lg">
+                                              <p className="text-xs text-gray-500 dark:text-gray-400">Date de début</p>
+                                              <p className="text-sm font-medium">{formatDate(bail.dates.start)}</p>
+                                            </div>
+                                            <div className="bg-white dark:bg-gray-800 p-2 rounded-lg">
+                                              <p className="text-xs text-gray-500 dark:text-gray-400">Date d'expiration</p>
+                                              <p className="text-sm font-medium">{formatDate(bail.dates.end)}</p>
+                                            </div>
+                                            <div className="bg-white dark:bg-gray-800 p-2 rounded-lg">
+                                              <p className="text-xs text-gray-500 dark:text-gray-400">Durée du bail</p>
+                                              <p className="text-sm font-medium">{bail.dates.duration}</p>
+                                            </div>
+                                            <div className="bg-white dark:bg-gray-800 p-2 rounded-lg">
+                                              <p className="text-xs text-gray-500 dark:text-gray-400">Rappel d'expiration</p>
+                                              <p className="text-sm font-medium">{bail.dates.expirationReminder}</p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
 

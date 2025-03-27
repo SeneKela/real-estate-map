@@ -245,9 +245,10 @@ export const properties = [
           }
         },
         "dates": {
-          "start": "01/01/2023",
-          "duration": "60 mois",
-          "end": "31/12/2027"
+          "start": "01/01/2020",
+          "duration": "6 ans",
+          "end": "01/01/2026",
+          "expirationReminder": "6 mois"
         },
         "parties": {
           "tenant": {
