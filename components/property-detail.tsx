@@ -1144,7 +1144,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
                                     <div>
                                       <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
                                         <Layers className="h-4 w-4 mr-2 text-gray-500" />
-                                        Sous-bails
+                                        Sous-baux
                                       </h4>
                                       <div className="space-y-4">
                                         {bail.sous_bails.map((sousBail: Sublease, idx: number) => (
