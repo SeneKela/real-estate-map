@@ -418,8 +418,8 @@ export const properties = [
         "nom": "Réaménagement des espaces de travail",
         "responsable": "Sophie Dubois",
         "budget": 0,
-        "dateDebut": "2023-07-01",
-        "dateFin": "2027-06-30",
+        "dateDebut": "2023-03-15",
+        "dateFin": "2027-09-15",
         "avancement": 40,
         "description": "Transformation des espaces de travail pour favoriser la collaboration et le flex office.",
         "actif": true
