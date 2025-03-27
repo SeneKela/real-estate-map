@@ -206,7 +206,7 @@ export const properties = [
     "departement": "Paris",
     "region": "Île-de-France",
     "valeur": 4200000,
-    "superficie": 15000,
+    "superficie": 260000,
     "type": "Administratif",
     "status": "actif",
     "ministere": "Économie",
